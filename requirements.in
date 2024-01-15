@@ -1,0 +1,3 @@
+-e file:../odp-core
+-e file:../odp-ui
+gunicorn
