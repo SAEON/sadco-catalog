@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+{% from 'lib.j2' import bootswatch_spacelab_css, jquery_js, leaflet_js, leaflet_css %}
+{% from 'page.j2' import nav_logo, nav_title, nav_menu, footer %}
+
+{% block web_title %}
+    Southern African Data Centre for Oceanography
+{% endblock %}
+
+{% block favicon %}
+    <link rel="icon" href="{{ url_for('static', filename='images/mims-icon-32x32.png') }}" sizes="32x32" />
+    <link rel="icon" href="{{ url_for('static', filename='images/mims-icon-192x192.png') }}" sizes="192x192" />
+{% endblock %}
+
+{% block header %}
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm px-2 py-3 sticky-top">
+        <div class="container-fluid">
+            <img src="{{ url_for('static', filename='images/mims-logo.png') }}" height="70">
+            <div class="d-flex flex-column mims-logo-color fs-5 mx-4 mt-2">
+                <span class="fw-semibold">Southern African Data Centre for Oceanography</span>
+                <span class="">Southern Africa's historical oceans and coastal data archive</span>
+            </div>
+            <div class="navbar-nav justify-content-end flex-grow-1 mt-2">
+                <div class="badge rounded-pill fs-6 fw-light mx-2">
+                    <a href="/" class="text-decoration-none">
+                        Home
+                    </a>
+                </div>
+                <div class="badge rounded-pill fs-6 fw-light mims-bg-color-mid mx-2">
+                    <a href="{{ url_for('surveys.index') }}" class="text-decoration-none text-reset">
+                        Catalogue
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block footer %}
+    <footer class="text-white">
+        <div class="mims-bg-color-light" style="height: 170px">
+            <div class="d-flex justify-content-evenly align-items-center">
+                <div class="pt-3">
+                    <p class="p-5 text-center" style="max-width: 550px">
+                        MIMS is a component of the National
+                        <a href="https://www.ocims.gov.za/" target="_blank" class="text-decoration-none">
+                            Oceans and Coasts Information Management System
+                        </a>
+                        (OCIMS) and manages the
+                        <a href="http://sadco.ocean.gov.za/" target="_blank" class="text-decoration-none">
+                            Southern African Data Centre for Oceanography
+                        </a>
+                        (SADCO).
+                    </p>
+                </div>
+                <div class="pe-5">
+                    <a href="https://www.ocims.gov.za/" target="_blank" class="p-5">
+                        <img src="{{ url_for('static', filename='images/ocims-logo.png') }}">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="mims-bg-color-mid" style="height: 60px">
+            <div class="d-flex justify-content-center align-items-center">
+                <p class="pt-4">
+                    Copyright &copy; <script>document.write(new Date().getFullYear())</script>
+                    <a href="https://www.dffe.gov.za/" target="_blank" class="text-decoration-none text-white">
+                        Department of Forestry, Fisheries and the Environment
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+
+{% block styles %}
+    {{ super() }}
+    {{ bootswatch_spacelab_css() }}
+    {{ leaflet_css() }}
+    <style>
+        :root {
+            --bs-link-color: #3E8A93;
+        }
+    </style>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ jquery_js() }}
+    {{ leaflet_js() }}
+    <script src="{{ url_for('static', filename='scripts/catalog.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/controls.js') }}"></script>
+    <script src="{{ url_for('.static', filename='scripts/surveys.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/leaflet-providers.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% from 'surveys.j2' import result_list, filter_panel %}
+{% from 'controls.j2' import pagination, check_all %}
+
+{% set pagination %}
+<div class="my-4 mx-3">
+    {{ pagination(
+            result.page,
+            result.pages,
+            result.total,
+            items_singular='survey',
+            items_plural='surveys',
+            **dict(request.args)
+        ) }}
+</div>
+{% endset %}
+
+{% block main %}
+    <main class="flex-grow-1 m-3">
+        <div class="container-xl">
+            <div class="row">
+                <div class="col-3 mx-2">
+                    {{ filter_panel(form, result['sampling_devices'], **dict(request.args)) }}
+                </div>
+                <div class="col mx-3">
+                    {{ pagination }}
+                    {{ result_list(result['items']) }}
+                    {% if result.total > 0 %}
+                        {{ pagination }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        createFilterMap();
+    </script>
+{% endblock %}
+

@@ -1,0 +1,251 @@
+{% from 'content.j2' import render_info %}
+
+{% macro search_box(
+    form,
+    placeholder='Search a Survey ID'
+) %}
+    <form action="{{ url_for('surveys.search') }}" method="post">
+        {{ form.csrf_token }}
+        <div class="bg-white rounded-pill p-1 px-3 border border-secondary">
+            <div class="input-group">
+                {{ form.survey_id(
+                    class='form-control bg-transparent border-0 shadow-none',
+                    placeholder=placeholder,
+                    autofocus=''
+                ) }}
+                <button type="submit" class="btn p-1">
+                    &#128269;
+                </button>
+            </div>
+        </div>
+    </form>
+{% endmacro %}
+
+
+{% macro result_list(
+    surveys
+) %}
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Project Name</th>
+            <th scope="col">Station Name</th>
+            <th scope="col">Platform Name</th>
+            <th scope="col">Chief Scientist</th>
+            <th scope="col">Institute</th>
+            <th scope="col">Date Start</th>
+            <th scope="col">Date End</th>
+            <th scope="col">Survey Type</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for survey in surveys %}
+            <tr class="table-row-action" onclick="window.location='/surveys/{{ survey['id'] | replace("/", "-") }}';">
+                <td>{{ survey['id'] }}</td>
+                <td>{{ survey['project_name'] }}</td>
+                <td>{{ survey['station_name'] }}</td>
+                <td>{{ survey['platform_name'] }}</td>
+                <td>{{ survey['chief_scientist'] }}</td>
+                <td>{{ survey['institute'] }}</td>
+                <td>{{ survey['date_start'] }}</td>
+                <td>{{ survey['date_end'] }}</td>
+                <td>{{ survey['survey_type'] }}</td>
+            </tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+{% endmacro %}
+
+
+{% macro filter_panel(
+    form,
+    sampling_devices,
+    show_search=false,
+    endpoint='.index'
+) %}
+    {# Render filtering and faceting panel.
+       Query params can be passed via kwargs.
+    #}
+    {% set _ = kwargs.pop('page', none) %}
+
+    <form action="{{ url_for('surveys.search') }}" method="post">
+        {{ form.csrf_token }}
+
+        {% if show_search %}
+            <div class="form-control p-0 pe-2 mb-4">
+                <div class="input-group">
+                    {{ form.q(
+                        class='form-control bg-transparent border-0 shadow-none',
+                        placeholder='Enter search terms...'
+                    ) }}
+                    <button type="submit" onclick="setFilter();" class="btn p-1">
+                        &#128269;
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            {{ form.q(type='hidden') }}
+        {% endif %}
+
+        <input id="sort" name="sort" type="hidden" value="">
+
+        <div class="mb-4">
+            <p class="fw-bold mb-2">
+                Filter by survey id
+            </p>
+            {{ form.survey_id.label(class='form-label') }}
+            {{ form.survey_id(class='form-control mb-2', placeholder='#### / ####') }}
+        </div>
+
+        <div class="mb-4">
+            <p class="fw-bold mb-2">
+                Filter by location
+            </p>
+            <div id="map"></div>
+            <small class="form-check mt-2">
+                {{ form.exclusive_region(class='form-check-input') }}
+                {{ form.exclusive_region.label(class='form-check-label') }}
+            </small>
+            {% for bound in 'n', 'e', 's', 'w' %}
+                {{ form[bound](type='hidden') }}
+            {% endfor %}
+        </div>
+
+        <div class="mb-4">
+            <p class="fw-bold mb-2">
+                Filter by date range
+            </p>
+            {{ form.after.label(class='form-label') }}
+            {{ form.after(class='form-control mb-2') }}
+            {{ form.before.label(class='form-label') }}
+            {{ form.before(class='form-control mb-2') }}
+            <small class="form-check">
+                {{ form.exclusive_interval(class='form-check-input') }}
+                {{ form.exclusive_interval.label(class='form-check-label') }}
+            </small>
+        </div>
+
+        <button type="submit" onclick="setFilter();" class="btn btn-outline-primary btn-action"
+                title="Apply filters" id="apply-filter">
+            Apply
+        </button>
+
+        <button type="submit" onclick="clearFilter();" class="btn btn-outline-primary btn-action"
+                title="Clear filters">
+            Clear
+        </button>
+    </form>
+
+    <div class="accordion mt-5">
+        <div class="accordion-item my-5">
+            <h5 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#sampling-devices">
+                    Sampling Devices
+                </button>
+            </h5>
+
+            <div id="sampling-devices" class="accordion-collapse collapse show">
+                <div class="accordion-body overflow-auto" style="max-height:72vh">
+                    {% for sampling_device in sampling_devices %}
+                        <p class="card-text">
+                            {% set query = dict(kwargs) %}
+                            {% set code =  sampling_device['code'] | string() %}
+
+                            {% if query.get('sampling_device_code') == code %}
+                                {% set _ = query.pop('sampling_device_code') %}
+                                <span class="fw-bold">{{ sampling_device['name'] }}</span>
+                                <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
+                                    &#10005;
+                                </a>
+                            {% else %}
+                                {% set _ = query.update({ 'sampling_device_code': code }) %}
+                                <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
+                                    {{ sampling_device['name'] }}
+                                    <span>({{ sampling_device['count'] }})</span>
+                                </a>
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro render_survey_details(
+    survey
+) %}
+    {% set N, E, S, W = survey.lat_north, survey.long_east, survey.lat_south, survey.long_west %}
+
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            {#<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">#}
+            <div class="nav-link active">
+                {% if survey.id %}
+                    ID:
+                    <span class="user-select-all">
+                        {{- survey.id -}}
+                    </span>
+                {% else %}
+                    No ID
+                {% endif %}
+            </div>
+            {#</button>#}
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="info" class="tab-pane fade show active" role="tabpanel">
+
+            {% set props = ['Project Name', 'Station Name', 'Platform Name', 'Chief Scientist', 'Institute', 'Temporal Extent', 'Survey Type', 'Number of Station', 'Data Types (Record Count)'] %}
+
+            {% call(prop) render_info(record, properties=props, hide_id=True) %}
+                {% if prop == 'Project Name' %}
+                    <strong>{{ survey.project_name }}</strong>
+
+                {% elif prop == 'Station Name' %}
+                    {{ survey.station_name }}
+
+                {% elif prop == 'Platform Name' %}
+                    {{ survey.platform_name }}
+
+                {% elif prop == 'Chief Scientist' %}
+                    {{ survey.chief_scientist }}
+
+                {% elif prop == 'Institute' %}
+                    {{ survey.institute }}
+
+                {% elif prop == 'Temporal Extent' %}
+                    {{ survey.date_start }} to {{ survey.date_end }}
+
+                {% elif prop == 'Survey Type' %}
+                    {{ survey.survey_type }}
+
+                {% elif prop == 'Number of Station' %}
+                    {{ survey.stations | length }}
+
+                {% elif prop == 'Data Types (Record Count)' %}
+                    <ul class="description-list-indented">
+                        {% for data_type, data_type_detail in survey.data_types.items() %}
+                            {% if data_type_detail is not none %}
+                                <li class="list-item-column-aligned">{{ data_type | title | replace("_", " ") }} ({{ data_type_detail.record_count }})</li>
+                                <ul>
+                                    {% for sub_data_type, sub_data_type_detail in data_type_detail.items() %}
+                                        {% if sub_data_type != 'record_count' and sub_data_type_detail is not none %}
+                                            <li>{{ sub_data_type | title | replace("_", " ") }}
+                                                ({{ sub_data_type_detail.record_count }})
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endcall %}
+        </div>
+    </div>
+{% endmacro %}
