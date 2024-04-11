@@ -1,8 +1,10 @@
 from flask import Blueprint, abort, current_app, make_response, redirect, render_template, request, url_for
 from odp.ui.base import cli
+from sadco.const import SurveyType
 from sadco.ui.catalog.forms import SearchForm
 
 bp = Blueprint('surveys', __name__,  static_folder='../static')
+
 
 @bp.route('/')
 @cli.view()
@@ -54,8 +56,28 @@ def search():
     return redirect(url_for('.index', **query))
 
 
-@bp.route('/<id>')
+@bp.route('/<survey_id>')
 @cli.view()
-def survey_detail(id):
-    survey = cli.get(f'/marine/surveys/{id}')
-    return render_template('survey_detail.html', survey=survey)
+def survey_detail(survey_id):
+    survey = cli.get(f'/marine/surveys/{survey_id}')
+    return render_template(get_survey_type_template(survey['survey_type']), survey=survey)
+
+
+def get_survey_type_template(survey_type) -> str:
+    match survey_type:
+        case SurveyType.HYDRO:
+            return 'marine_survey_detail.html'
+        case SurveyType.CURRENTS:
+            return ''
+        case SurveyType.WEATHER:
+            return ''
+        case SurveyType.WAVES:
+            return ''
+        case SurveyType.ECHOSOUNDING:
+            return ''
+        case SurveyType.UTR:
+            return ''
+        case SurveyType.VOS:
+            return ''
+        case SurveyType.UNKNOWN:
+            return ''

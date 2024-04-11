@@ -11,7 +11,7 @@ function createStationsMap(stations, n, e, s, w) {
 
     stations.forEach((station) => {
             var latlng = L.latLng(station['latitude'], station['longitude']);
-            L.circleMarker(latlng, {radius: 1}).addTo(map);
+            L.circleMarker(latlng, {radius: 2, fillColor: 'red', color: 'red', fillOpacity: 1}).addTo(map);
         }
     );
 }

@@ -175,7 +175,7 @@
     </div>
 {% endmacro %}
 
-{% macro render_survey_details(
+{% macro render_survey_summary(
     survey
 ) %}
     {% set N, E, S, W = survey.lat_north, survey.long_east, survey.lat_south, survey.long_west %}
@@ -200,7 +200,7 @@
     <div class="tab-content">
         <div id="info" class="tab-pane fade show active" role="tabpanel">
 
-            {% set props = ['Project Name', 'Station Name', 'Platform Name', 'Chief Scientist', 'Institute', 'Temporal Extent', 'Survey Type', 'Number of Station', 'Data Types (Record Count)'] %}
+            {% set props = ['Project Name', 'Station Name', 'Platform Name', 'Chief Scientist', 'Institute', 'Temporal Extent', 'Survey Type', 'Number of Station'] %}
 
             {% call(prop) render_info(record, properties=props, hide_id=True) %}
                 {% if prop == 'Project Name' %}
@@ -227,25 +227,44 @@
                 {% elif prop == 'Number of Station' %}
                     {{ survey.stations | length }}
 
-                {% elif prop == 'Data Types (Record Count)' %}
-                    <ul class="description-list-indented">
-                        {% for data_type, data_type_detail in survey.data_types.items() %}
-                            {% if data_type_detail is not none %}
-                                <li class="list-item-column-aligned">{{ data_type | title | replace("_", " ") }} ({{ data_type_detail.record_count }})</li>
-                                <ul>
-                                    {% for sub_data_type, sub_data_type_detail in data_type_detail.items() %}
-                                        {% if sub_data_type != 'record_count' and sub_data_type_detail is not none %}
-                                            <li>{{ sub_data_type | title | replace("_", " ") }}
-                                                ({{ sub_data_type_detail.record_count }})
-                                            </li>
-                                        {% endif %}
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
                 {% endif %}
             {% endcall %}
         </div>
     </div>
+{% endmacro %}
+
+{% macro render_marine_survey_detail(
+    survey
+) %}
+    <p class="fw-bold mb-2">
+        Data Details
+    </p>
+
+    <table class="table table-hover table-bordered w-auto">
+        <thead>
+        <tr>
+            <th scope="col">Data Type</th>
+            <th scope="col">Record Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for data_type, data_type_detail in survey.data_types.items() %}
+            {% if data_type_detail is not none %}
+                <tr>
+                    <td><strong>{{ data_type | title | replace("_", " ") }}</strong></td>
+                    <td class="text-end">{{ data_type_detail.record_count }}</td>
+                </tr>
+                {% for sub_data_type, sub_data_type_detail in data_type_detail.items() %}
+                    {% if sub_data_type != 'record_count' and sub_data_type_detail is not none %}
+                        <tr>
+                            <td>&ensp;{{ sub_data_type | title | replace("_", " ") }}</td>
+                            <td class="text-end">{{ sub_data_type_detail.record_count }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
+        </tbody>
+    </table>
 {% endmacro %}
