@@ -56,10 +56,10 @@ def search():
     return redirect(url_for('.index', **query))
 
 
-@bp.route('/<survey_id>')
+@bp.route('/<survey_type>/<survey_id>')
 @cli.view()
-def survey_detail(survey_id):
-    survey = cli.get(f'/marine/surveys/{survey_id}')
+def survey_detail(survey_type, survey_id):
+    survey = cli.get(f'/marine/surveys/{survey_type}/{survey_id}')
     return render_template(get_survey_type_template(survey['survey_type']), survey=survey)
 
 

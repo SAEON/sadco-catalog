@@ -41,7 +41,7 @@
         </thead>
         <tbody>
         {% for survey in surveys %}
-            <tr class="table-row-action" onclick="window.location='/surveys/{{ survey['id'] | replace("/", "-") }}';">
+            <tr class="table-row-action" onclick="window.location='/surveys/{{ survey['survey_type'] | lower }}/{{ survey['id'] | replace("/", "-") }}';">
                 <td>{{ survey['id'] }}</td>
                 <td>{{ survey['project_name'] }}</td>
                 <td>{{ survey['station_name'] }}</td>
@@ -236,7 +236,7 @@
 {% macro render_marine_survey_detail(
     survey
 ) %}
-    <p class="fw-bold mb-2">
+    <p class="fw-bold mb-2 mx-2">
         Data Details
     </p>
 
