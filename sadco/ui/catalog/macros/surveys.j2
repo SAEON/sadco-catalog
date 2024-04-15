@@ -41,7 +41,8 @@
         </thead>
         <tbody>
         {% for survey in surveys %}
-            <tr class="table-row-action" onclick="window.location='/surveys/{{ survey['survey_type'] | lower }}/{{ survey['id'] | replace("/", "-") }}';">
+            <tr class="table-row-action"
+                onclick="window.location='/surveys/{{ survey['survey_type'] | lower }}/{{ survey['id'] | replace("/", "-") }}';">
                 <td>{{ survey['id'] }}</td>
                 <td>{{ survey['project_name'] }}</td>
                 <td>{{ survey['station_name'] }}</td>
@@ -62,6 +63,7 @@
 {% macro filter_panel(
     form,
     sampling_devices,
+    survey_types,
     show_search=false,
     endpoint='.index'
 ) %}
@@ -139,6 +141,40 @@
     </form>
 
     <div class="accordion mt-5">
+        <div class="accordion-item my-5">
+            <h5 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#survey-types">
+                    Data Types
+                </button>
+            </h5>
+
+            <div id="survey-types" class="accordion-collapse collapse show">
+                <div class="accordion-body overflow-auto" style="max-height:72vh">
+                    {% for survey_type in survey_types %}
+                        <p class="card-text">
+                            {% set query = dict(kwargs) %}
+                            {% set code =  survey_type['code'] | string() %}
+
+                            {% if query.get('survey_type_code') == code %}
+                                {% set _ = query.pop('survey_type_code') %}
+                                <span class="fw-bold">{{ survey_type['name'] }}</span>
+                                <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
+                                    &#10005;
+                                </a>
+                            {% else %}
+                                {% set _ = query.update({ 'survey_type_code': code }) %}
+                                <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
+                                    {{ survey_type['name'] }}
+                                    <span>({{ survey_type['count'] }})</span>
+                                </a>
+                            {% endif %}
+                        </p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
         <div class="accordion-item my-5">
             <h5 class="accordion-header">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse"

@@ -20,7 +20,7 @@
         <div class="container-xl">
             <div class="row">
                 <div class="col-3 mx-2">
-                    {{ filter_panel(form, result['sampling_devices'], **dict(request.args)) }}
+                    {{ filter_panel(form, result['sampling_devices'], result['survey_types'], **dict(request.args)) }}
                 </div>
                 <div class="col mx-3">
                     {{ pagination }}
