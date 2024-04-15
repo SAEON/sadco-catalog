@@ -22,7 +22,7 @@ def index():
     page = request.args.get('page', 1)
 
     result = cli.get(
-        f'/marine/surveys/search',
+        f'/survey/surveys/search',
         survey_id=survey_id,
         north_bound=north_bound,
         east_bound=east_bound,
@@ -59,7 +59,7 @@ def search():
 @bp.route('/<survey_type>/<survey_id>')
 @cli.view()
 def survey_detail(survey_type, survey_id):
-    survey = cli.get(f'/marine/surveys/{survey_type}/{survey_id}')
+    survey = cli.get(f'/survey/{survey_type}/{survey_id}')
     return render_template(get_survey_type_template(survey['survey_type']), survey=survey)
 
 
