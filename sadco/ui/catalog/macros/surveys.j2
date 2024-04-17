@@ -41,9 +41,12 @@
         </thead>
         <tbody>
         {% for survey in surveys %}
-            <tr class="table-row-action"
-                onclick="window.location='/surveys/{{ survey['survey_type'] | lower }}/{{ survey['id'] | replace("/", "-") }}';">
-                <td>{{ survey['id'] }}</td>
+            <tr class="table-row-action">
+                <td>
+                    <a href="{{ url_for('surveys.survey_detail', survey_type=survey['survey_type'].lower(), survey_id=survey['id'].replace("/", "-")) }}">
+                        {{ survey['id'] }}
+                    </a>
+                </td>
                 <td>{{ survey['project_name'] }}</td>
                 <td>{{ survey['station_name'] }}</td>
                 <td>{{ survey['platform_name'] }}</td>
