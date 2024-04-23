@@ -1,6 +1,13 @@
 {% extends 'survey_detail.html' %}
-{% from 'surveys.j2' import render_marine_survey_detail %}
+{% from 'surveys.j2' import render_marine_survey_detail, render_hydro_download %}
 
 {% block survey_details %}
-    {{ render_marine_survey_detail(survey) }}
+    <div class="row">
+        <div class="col">
+            {{ render_marine_survey_detail(survey) }}
+        </div>
+        <div class="col">
+            {{ render_hydro_download(survey, form) }}
+        </div>
+    </div>
 {% endblock %}

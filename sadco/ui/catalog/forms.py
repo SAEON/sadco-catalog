@@ -1,11 +1,7 @@
 from odp.ui.base.forms import BaseForm, DateStringField
 
-import re
-from flask import Flask, session
-from wtforms.csrf.session import SessionCSRF
-from wtforms import BooleanField, DateField, FloatField, Form, SelectField, SelectMultipleField, StringField, \
-    TextAreaField, ValidationError
-from wtforms.validators import optional, length, regexp
+from wtforms import BooleanField, FloatField, SelectField, StringField
+from wtforms.validators import optional
 
 
 class SearchForm(BaseForm):
@@ -19,3 +15,7 @@ class SearchForm(BaseForm):
     before = DateStringField(validators=[optional()], label='End date')
     exclusive_region = BooleanField(label='Exclusive region')
     exclusive_interval = BooleanField(label='Exclusive interval')
+
+
+class HydroDownloadForm(BaseForm):
+    data_type = SelectField(label='Data type')

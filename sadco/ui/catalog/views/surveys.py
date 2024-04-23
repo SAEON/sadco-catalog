@@ -1,9 +1,12 @@
-from flask import Blueprint, abort, current_app, make_response, redirect, render_template, request, url_for
+from flask import Blueprint, send_file, redirect, render_template, request, url_for
 from odp.ui.base import cli
+from io import BytesIO
+import zipfile
 from sadco.const import SurveyType
-from sadco.ui.catalog.forms import SearchForm
+from odp.ui.base.forms import BaseForm
+from sadco.ui.catalog.forms import SearchForm, HydroDownloadForm
 
-bp = Blueprint('surveys', __name__,  static_folder='../static')
+bp = Blueprint('surveys', __name__, static_folder='../static')
 
 
 @bp.route('/')
@@ -62,10 +65,44 @@ def search():
 @cli.view()
 def survey_detail(survey_type, survey_id):
     survey = cli.get(f'/survey/{survey_type}/{survey_id}')
-    return render_template(get_survey_type_template(survey['survey_type']), survey=survey)
+
+    form = get_survey_type_form(survey, survey_type)
+
+    return render_template(
+        get_survey_type_template(survey_type),
+        form=form,
+        survey=survey
+    )
+
+
+@bp.route('/download/<survey_type>/<survey_id>', methods=('POST',))
+def download(survey_type, survey_id):
+    form = HydroDownloadForm(request.form)
+    data_type = form.data['data_type']
+
+    survey_data = cli.get_data(
+        f'/survey/download/{survey_type}/{survey_id}',
+        data_type=data_type
+    )
+
+    file_name = f'survey_{survey_id}_{data_type}.zip'
+
+    zip_buffer = BytesIO()
+    with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+        zip_file.writestr(file_name, survey_data)
+
+    zip_buffer.seek(0)
+
+    return send_file(
+        zip_buffer,
+        mimetype='application/zip',
+        as_attachment=True,
+        download_name=file_name
+    )
 
 
 def get_survey_type_template(survey_type) -> str:
+    """Get a template specific to a survey type"""
     match survey_type:
         case SurveyType.HYDRO:
             return 'marine_survey_detail.html'
@@ -83,3 +120,31 @@ def get_survey_type_template(survey_type) -> str:
             return ''
         case SurveyType.UNKNOWN:
             return ''
+
+
+def get_survey_type_form(survey, survey_type) -> BaseForm:
+    """Return a form specific to the survey type."""
+    match survey_type:
+        case SurveyType.HYDRO:
+            return get_hydro_download_form(survey)
+        case _:
+            return BaseForm()
+
+
+def get_hydro_download_form(survey) -> HydroDownloadForm:
+    """Set the hydro form select choices based on the surveys data types and return the form"""
+    hydro_download_form = HydroDownloadForm(request.args)
+
+    data_type_choices = []
+
+    for data_type, data_type_detail in survey['data_types'].items():
+        if data_type_detail is None:
+            continue
+        data_type_choices.append((data_type, data_type.title().replace('_', ' ')))
+        for sub_data_type, sub_data_type_detail in data_type_detail.items():
+            if sub_data_type != 'record_count' and sub_data_type_detail is not None:
+                data_type_choices.append((sub_data_type, sub_data_type.title().replace('_', ' ')))
+
+    hydro_download_form.data_type.choices = data_type_choices
+
+    return hydro_download_form

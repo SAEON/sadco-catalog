@@ -307,3 +307,25 @@
         </tbody>
     </table>
 {% endmacro %}
+
+
+{% macro render_hydro_download(
+    survey,
+    form
+) %}
+    <form action="{{ url_for('surveys.download', survey_type=survey['survey_type'].lower(), survey_id=survey['id'].replace("/", "-")) }}" method="post">
+        {{ form.csrf_token }}
+        <div>
+            <p class="fw-bold mb-2 mx-2">
+                Data Download
+            </p>
+            <div>
+                {#                {{ form.data_type.label(class='form-label') }}#}
+                {{ form.data_type(class='form-select mb-2') }}
+            </div>
+            <button type="submit" class="btn btn-outline-primary btn-action">
+                Download &#x2193;
+            </button>
+        </div>
+    </form>
+{% endmacro %}
