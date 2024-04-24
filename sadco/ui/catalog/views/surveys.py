@@ -5,6 +5,7 @@ import zipfile
 from sadco.const import SurveyType
 from odp.ui.base.forms import BaseForm
 from sadco.ui.catalog.forms import SearchForm, HydroDownloadForm
+from sadco.const import DataType
 
 bp = Blueprint('surveys', __name__, static_folder='../static')
 
@@ -132,18 +133,32 @@ def get_survey_type_form(survey, survey_type) -> BaseForm:
 
 
 def get_hydro_download_form(survey) -> HydroDownloadForm:
-    """Set the hydro form select choices based on the surveys data types and return the form"""
+    """Set the 'hydro form' select choices based on the surveys data types and return the form"""
     hydro_download_form = HydroDownloadForm(request.args)
 
     data_type_choices = []
 
+    has_water_chemistry_and_nutrients = False
+
     for data_type, data_type_detail in survey['data_types'].items():
+
         if data_type_detail is None:
             continue
         data_type_choices.append((data_type, data_type.title().replace('_', ' ')))
+
+        if not has_water_chemistry_and_nutrients and data_type_detail.get(
+                DataType.WATERCHEMISTRY) and data_type_detail.get(DataType.WATERNUTRIENTS):
+            has_water_chemistry_and_nutrients = True
+
         for sub_data_type, sub_data_type_detail in data_type_detail.items():
+
             if sub_data_type != 'record_count' and sub_data_type_detail is not None:
                 data_type_choices.append((sub_data_type, sub_data_type.title().replace('_', ' ')))
+
+        if has_water_chemistry_and_nutrients:
+            has_water_chemistry_and_nutrients = False
+            data_type_choices.append(
+                (DataType.WATERNUTRIENTSANDCHEMISTRY.value, DataType.WATERNUTRIENTSANDCHEMISTRY.title().replace('_', ' ')))
 
     hydro_download_form.data_type.choices = data_type_choices
 
