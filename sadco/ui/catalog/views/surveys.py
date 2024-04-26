@@ -81,7 +81,7 @@ def download(survey_type, survey_id):
     form = HydroDownloadForm(request.form)
     data_type = form.data['data_type']
 
-    survey_data = cli.get_data(
+    survey_data = cli.get_bytes(
         f'/survey/download/{survey_type}/{survey_id}',
         data_type=data_type
     )
