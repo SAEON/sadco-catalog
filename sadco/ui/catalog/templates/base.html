@@ -79,8 +79,12 @@
     <style>
         :root {
             --bs-link-color: #3E8A93;
+            --home-background-url: url( {{ url_for('.static', filename='images/wild-ocean.jpg') }} );
+            --catalog-index-background-url: url( {{ url_for('.static', filename='images/instrument.jpg') }} );
         }
     </style>
+
+    <link rel="stylesheet" href="{{ url_for('.static', filename='styles/surveys.css') }}">
 {% endblock %}
 
 {% block scripts %}
