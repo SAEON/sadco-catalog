@@ -4,16 +4,16 @@
 {% block main %}
     <main class="flex-grow-1 m-3">
         <div class="container-xl">
-            <div class="row">
-                <div class="col mx-3">
+            <div class="row mb-5">
+                <div class="col px-2">
                     {{ render_survey_summary(survey) }}
 
-                    <div class="mt-5 bg-white p-2">
+                    <div class="mt-2 bg-white-op p-2 rounded">
                         {% block survey_details %}
                         {% endblock %}
                     </div>
                 </div>
-                <div class="stations-map-wrapper col mx-3 bg-white p-2" style="height: fit-content">
+                <div class="stations-map-wrapper col bg-white-op p-2 rounded" style="height: fit-content">
                     <p class="fw-bold mb-2">
                         Stations
                     </p>

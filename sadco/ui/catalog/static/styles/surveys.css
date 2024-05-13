@@ -6,5 +6,13 @@ body {
 }
 
 .stations-map-wrapper {
-    margin-top: 2.5rem;
+    margin-top: 2.5em;
+}
+
+.survey-details-wrapper {
+    border-radius: 0 0.2em 0.2em 0.2em;
+}
+
+.bg-white-op {
+    background-color: rgba(var(--bs-white-rgb), 0.95) !important;
 }

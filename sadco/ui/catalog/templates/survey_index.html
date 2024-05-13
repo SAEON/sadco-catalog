@@ -22,7 +22,7 @@
                 <div class="col-3 mx-2">
                     {{ filter_panel(form, result['sampling_devices'], result['survey_types'], **dict(request.args)) }}
                 </div>
-                <div class="col mx-3 bg-white" style="height: min-content">
+                <div class="col bg-white-op rounded" style="height: min-content">
                     {{ pagination }}
                     {{ result_list(result['items']) }}
                     {% if result.total > 0 %}
