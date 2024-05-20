@@ -1,10 +1,10 @@
 {% extends 'survey_detail.html' %}
-{% from 'surveys.j2' import render_marine_survey_detail, render_hydro_download %}
+{% from 'surveys.j2' import render_hydro_survey_detail, render_hydro_download %}
 
 {% block survey_details %}
     <div class="row">
         <div class="col">
-            {{ render_marine_survey_detail(survey) }}
+            {{ render_hydro_survey_detail(survey) }}
         </div>
         <div class="col">
             {{ render_hydro_download(survey, form) }}

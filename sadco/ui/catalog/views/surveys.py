@@ -89,7 +89,7 @@ def download(survey_type, survey_id):
     file_name = f'survey_{survey_id}_{data_type}.zip'
 
     zip_buffer = BytesIO()
-    with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+    with zipfile.ZipFile(zip_buffer, mode='w') as zip_file:
         zip_file.writestr(file_name, survey_data)
 
     zip_buffer.seek(0)
@@ -103,10 +103,12 @@ def download(survey_type, survey_id):
 
 
 def get_survey_type_template(survey_type) -> str:
-    """Get a template specific to a survey type"""
+    """
+    Get a template specific to a survey type
+    """
     match survey_type:
         case SurveyType.HYDRO:
-            return 'marine_survey_detail.html'
+            return 'hydro_survey_detail.html'
         case SurveyType.CURRENTS:
             return ''
         case SurveyType.WEATHER:
@@ -124,7 +126,9 @@ def get_survey_type_template(survey_type) -> str:
 
 
 def get_survey_type_form(survey, survey_type) -> BaseForm:
-    """Return a form specific to the survey type."""
+    """
+    Return a form specific to the survey type.
+    """
     match survey_type:
         case SurveyType.HYDRO:
             return get_hydro_download_form(survey)
@@ -133,7 +137,9 @@ def get_survey_type_form(survey, survey_type) -> BaseForm:
 
 
 def get_hydro_download_form(survey) -> HydroDownloadForm:
-    """Set the 'hydro form' select choices based on the surveys data types and return the form"""
+    """
+    Set the 'hydro form' select choices based on the surveys data types and return the form
+    """
     hydro_download_form = HydroDownloadForm(request.args)
 
     data_type_choices = []
@@ -158,7 +164,8 @@ def get_hydro_download_form(survey) -> HydroDownloadForm:
         if has_water_chemistry_and_nutrients:
             has_water_chemistry_and_nutrients = False
             data_type_choices.append(
-                (DataType.WATERNUTRIENTSANDCHEMISTRY.value, DataType.WATERNUTRIENTSANDCHEMISTRY.title().replace('_', ' ')))
+                (DataType.WATERNUTRIENTSANDCHEMISTRY.value,
+                 DataType.WATERNUTRIENTSANDCHEMISTRY.title().replace('_', ' ')))
 
     hydro_download_form.data_type.choices = data_type_choices
 
