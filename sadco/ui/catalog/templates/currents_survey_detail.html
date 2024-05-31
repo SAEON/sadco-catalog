@@ -1,0 +1,8 @@
+{% extends 'survey_detail.html' %}
+{% from 'surveys.j2' import render_currents_survey_detail %}
+
+{% block survey_details %}
+    <div>
+        {{ render_currents_survey_detail(survey.mooring_details) }}
+    </div>
+{% endblock %}
