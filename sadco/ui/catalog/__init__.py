@@ -4,6 +4,7 @@ from flask import Flask
 from jinja2 import ChoiceLoader, FileSystemLoader
 
 from sadco.config import sadco_config
+from sadco.const import SADCOScope
 from sadco.ui.catalog import views
 from odp.ui import base
 
@@ -17,7 +18,9 @@ def create_app():
         CI_CLIENT_ID=sadco_config.SADCO.CATALOG.CI_CLIENT_ID,
         CI_CLIENT_SECRET=sadco_config.SADCO.CATALOG.CI_CLIENT_SECRET,
         CI_CLIENT_SCOPE=[
-            'SADCO'
+            SADCOScope.SURVEYS_READ,
+            SADCOScope.HYDRO_READ,
+            SADCOScope.CURRENTS_READ
         ],
         SECRET_KEY=sadco_config.SADCO.CATALOG.FLASK_SECRET,
         CATALOG_TERMS_OF_USE='''
