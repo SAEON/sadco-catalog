@@ -1,17 +1,18 @@
 from flask import Blueprint, send_file, redirect, render_template, request, url_for
-from odp.ui.base import cli
+from odp.ui.base import cli, api
 from io import BytesIO
 import zipfile
 from sadco.const import SurveyType
 from odp.ui.base.forms import BaseForm
 from sadco.ui.catalog.forms import SearchForm, HydroDownloadForm
-from sadco.const import DataType
+from sadco.const import DataType, SADCOScope
 
 bp = Blueprint('surveys', __name__, static_folder='../static')
 
 
 @bp.route('/')
 @cli.view()
+@api.user()
 def index():
     survey_id = request.args.get('survey_id')
     north_bound = request.args.get('n')
@@ -77,9 +78,9 @@ def survey_detail(survey_type, survey_id):
 
 
 @bp.route('/download/<survey_type>/<survey_id>', methods=('POST',))
+# @api.view(SADCOScope.HYDRO_DOWNLOAD)
 def download(survey_type, survey_id):
-    form = HydroDownloadForm(request.form)
-    data_type = form.data['data_type']
+    data_type = get_download_data_type(survey_type)
 
     survey_data = cli.get_bytes(
         f'/survey/download/{survey_type}/{survey_id}',
@@ -100,6 +101,15 @@ def download(survey_type, survey_id):
         as_attachment=True,
         download_name=file_name
     )
+
+
+def get_download_data_type(survey_type) -> str:
+    match survey_type:
+        case SurveyType.HYDRO:
+            form = HydroDownloadForm(request.form)
+            return form.data['data_type']
+        case SurveyType.CURRENTS:
+            return 'currents'
 
 
 def get_survey_type_template(survey_type) -> str:

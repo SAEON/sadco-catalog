@@ -368,6 +368,21 @@
 {% endmacro %}
 
 
+{% macro render_currents_download(
+    survey
+) %}
+    <form action="{{ url_for('surveys.download', survey_type=survey['survey_type'].lower(), survey_id=survey['id'].replace("/", "-")) }}"
+          method="post">
+        <div>
+            <p class="fw-bold mb-2">
+                Data Download
+            </p>
+            {{ download_button() }}
+        </div>
+    </form>
+{% endmacro %}
+
+
 {% macro download_button() %}
     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-popup">
         Download &#x1f4e5;
