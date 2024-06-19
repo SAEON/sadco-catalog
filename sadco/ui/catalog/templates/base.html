@@ -20,19 +20,13 @@
                 <span class="">Southern Africa's historical oceans and coastal data archive</span>
             </div>
             <div class="navbar-nav justify-content-end flex-grow-1 mt-2">
-                <div class="badge rounded-pill fs-6 fw-light mx-2">
-                    <a href="/" class="text-decoration-none">
-                        Home
-                    </a>
-                </div>
-                <div class="badge rounded-pill fs-6 fw-light mims-bg-color-mid mx-2">
-                    <a href="{{ url_for('surveys.index') }}" class="text-decoration-none text-reset">
-                        Catalogue
-                    </a>
-                </div>
-                <div class="badge rounded-pill fs-6 fw-light mims-bg-color-mid mx-2">
-                    <a href="{{ url_for('hydra.login') }}" class="text-decoration-none text-reset">log in</a>
-                </div>
+                {{ nav_menu(
+                    current_user,
+                    request.blueprint,
+                    home='Home',
+                    surveys='Catalog',
+                    wiki=false
+                ) }}
             </div>
         </div>
     </nav>

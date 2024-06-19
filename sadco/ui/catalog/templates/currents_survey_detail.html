@@ -5,7 +5,7 @@
     <div class="d-flex flex-column">
         {{ render_currents_survey_detail(survey.mooring_details) }}
         <div class="ms-auto">
-            {{ render_currents_download(survey) }}
+            {{ render_currents_download(current_user, survey) }}
         </div>
     </div>
 {% endblock %}

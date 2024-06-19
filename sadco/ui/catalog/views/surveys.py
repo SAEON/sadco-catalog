@@ -77,12 +77,22 @@ def survey_detail(survey_type, survey_id):
     )
 
 
-@bp.route('/download/<survey_type>/<survey_id>', methods=('POST',))
-# @api.view(SADCOScope.HYDRO_DOWNLOAD)
+@bp.route(f'/download/{SurveyType.HYDRO.value}/<survey_id>', methods=('POST',))
+@api.view(SADCOScope.HYDRO_DOWNLOAD)
+def hydro_download(survey_id):
+    return download(SurveyType.HYDRO.value, survey_id)
+
+
+@bp.route(f'/download/{SurveyType.CURRENTS.value}/<survey_id>', methods=('POST',))
+@api.view(SADCOScope.CURRENTS_DOWNLOAD)
+def currents_download(survey_id):
+    return download(SurveyType.CURRENTS.value, survey_id)
+
+
 def download(survey_type, survey_id):
     data_type = get_download_data_type(survey_type)
 
-    survey_data = cli.get_bytes(
+    survey_data = api.get_bytes(
         f'/survey/download/{survey_type}/{survey_id}',
         data_type=data_type
     )

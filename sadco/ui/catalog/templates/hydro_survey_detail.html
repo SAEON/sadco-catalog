@@ -7,7 +7,7 @@
             {{ render_hydro_survey_detail(survey) }}
         </div>
         <div class="col">
-            {{ render_hydro_download(survey, form) }}
+            {{ render_hydro_download(current_user, survey, form) }}
         </div>
     </div>
 {% endblock %}

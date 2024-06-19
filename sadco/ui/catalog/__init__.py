@@ -5,6 +5,7 @@ from jinja2 import ChoiceLoader, FileSystemLoader
 
 from sadco.config import sadco_config
 from sadco.const import SADCOScope
+from odp.const import ODPScope
 from sadco.ui.catalog import views
 from odp.const.hydra import HydraScope
 from odp.ui import base
@@ -22,6 +23,8 @@ def create_app():
             HydraScope.OPENID,
             HydraScope.OFFLINE_ACCESS,
             SADCOScope.HYDRO_DOWNLOAD,
+            SADCOScope.CURRENTS_DOWNLOAD,
+            ODPScope.TOKEN_READ
         ],
         CI_CLIENT_ID=sadco_config.SADCO.CATALOG.CI_CLIENT_ID,
         CI_CLIENT_SECRET=sadco_config.SADCO.CATALOG.CI_CLIENT_SECRET,

@@ -310,10 +310,11 @@
 
 
 {% macro render_hydro_download(
+    current_user,
     survey,
     form
 ) %}
-    <form action="{{ url_for('surveys.download', survey_type=survey['survey_type'].lower(), survey_id=survey['id'].replace("/", "-")) }}"
+    <form action="{{ url_for('surveys.hydro_download', survey_id=survey['id'].replace("/", "-")) }}"
           method="post">
         {{ form.csrf_token }}
         <div>
@@ -323,7 +324,7 @@
             <div>
                 {{ form.data_type(class='form-select mb-2') }}
             </div>
-            {{ download_button() }}
+            {{ download_button(current_user) }}
         </div>
     </form>
 {% endmacro %}
@@ -369,24 +370,37 @@
 
 
 {% macro render_currents_download(
+    current_user,
     survey
 ) %}
-    <form action="{{ url_for('surveys.download', survey_type=survey['survey_type'].lower(), survey_id=survey['id'].replace("/", "-")) }}"
+    <form action="{{ url_for('surveys.currents_download', survey_id=survey['id'].replace("/", "-")) }}"
           method="post">
         <div>
             <p class="fw-bold mb-2">
                 Data Download
             </p>
-            {{ download_button() }}
+            {{ download_button(current_user) }}
         </div>
     </form>
 {% endmacro %}
 
 
-{% macro download_button() %}
-    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-popup">
-        Download &#x1f4e5;
-    </button>
+{% macro download_button(
+    current_user
+) %}
+    <span class="d-inline-block"
+        {% if not current_user or not current_user.is_authenticated %}
+            data-toggle="tooltip" title="Please login/sign up"
+        {% endif %}
+    >
+        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-popup"
+            {% if not current_user or not current_user.is_authenticated %}
+                disabled
+            {% endif %}
+        >
+            Download &#x1f4e5;
+        </button>
+    </span>
 
     <div class="modal fade" id="download-popup" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
