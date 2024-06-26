@@ -65,6 +65,7 @@ def search():
 
 @bp.route('/<survey_type>/<survey_id>')
 @cli.view()
+@api.user()
 def survey_detail(survey_type, survey_id):
     survey = cli.get(f'/survey/{survey_type}/{survey_id}')
 

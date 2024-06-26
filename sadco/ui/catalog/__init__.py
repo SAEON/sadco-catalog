@@ -31,7 +31,8 @@ def create_app():
         CI_CLIENT_SCOPE=[
             SADCOScope.SURVEYS_READ,
             SADCOScope.HYDRO_READ,
-            SADCOScope.CURRENTS_READ
+            SADCOScope.CURRENTS_READ,
+            SADCOScope.WEATHER_READ
         ],
         SECRET_KEY=sadco_config.SADCO.CATALOG.FLASK_SECRET,
         CATALOG_TERMS_OF_USE='''
