@@ -1,0 +1,11 @@
+{% extends 'survey_detail.html' %}
+{% from 'surveys.j2' import render_weather_survey_detail, render_weather_download %}
+
+{% block survey_details %}
+    <div class="d-flex flex-column">
+        {{ render_weather_survey_detail(survey.weather_period_counts) }}
+        <div class="ms-auto">
+            {{ render_weather_download(current_user, survey) }}
+        </div>
+    </div>
+{% endblock %}

@@ -132,7 +132,7 @@ def get_survey_type_template(survey_type) -> str:
         case SurveyType.CURRENTS:
             return 'currents_survey_detail.html'
         case SurveyType.WEATHER:
-            return ''
+            return 'weather_survey_detail.html'
         case SurveyType.WAVES:
             return ''
         case SurveyType.ECHOSOUNDING:

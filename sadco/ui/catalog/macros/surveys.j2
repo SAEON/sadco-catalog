@@ -351,25 +351,65 @@
         </tr>
         </thead>
         <tbody>
-        {% for mooring_detail in mooring_details %}
-            <tr class="table-row-action">
-                <td>{{ mooring_detail['depth'] }}</td>
-                <td>{{ mooring_detail['instrument_number'] }}</td>
-                <td>{{ mooring_detail['parameters'] }}</td>
-                <td>{{ mooring_detail['date_time_start'] }}</td>
-                <td>{{ mooring_detail['date_time_end'] }}</td>
-                <td>{{ mooring_detail['interval'] }}</td>
-                <td>{{ mooring_detail['records'] }}</td>
-                <td>{{ mooring_detail['quality_control'] }}</td>
-            </tr>
-        {% endfor %}
-
+            {% for mooring_detail in mooring_details %}
+                <tr class="table-row-action">
+                {% for field, value in mooring_detail.items() %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endmacro %}
 
 
 {% macro render_currents_download(
+    current_user,
+    survey
+) %}
+    <form action="{{ url_for('surveys.currents_download', survey_id=survey['id'].replace("/", "-")) }}"
+          method="post">
+        <div>
+            <p class="fw-bold mb-2">
+                Data Download
+            </p>
+            {{ download_button(current_user) }}
+        </div>
+    </form>
+{% endmacro %}
+
+
+{% macro render_weather_survey_detail(
+    weather_period_counts
+) %}
+     <p class="fw-bold mb-2 mx-2">
+        Weather Period Record Counts
+    </p>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                {% for weather_period_count in weather_period_counts %}
+                    {% for field, value in weather_period_count.items() %}
+                        <th scope="col">{{ field | title | replace("_", " ") }}</th>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for weather_period_count in weather_period_counts %}
+                <tr class="table-row-action">
+                {% for field, value in weather_period_count.items() %}
+                    <td>{{ value }}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endmacro %}
+
+
+{% macro render_weather_download(
     current_user,
     survey
 ) %}
