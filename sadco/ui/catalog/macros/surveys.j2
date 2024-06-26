@@ -1,5 +1,6 @@
 {% from 'content.j2' import render_info %}
 
+
 {% macro search_box(
     form,
     placeholder='Search a Survey ID'
@@ -351,13 +352,7 @@
         </tr>
         </thead>
         <tbody>
-            {% for mooring_detail in mooring_details %}
-                <tr class="table-row-action">
-                {% for field, value in mooring_detail.items() %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-                </tr>
-            {% endfor %}
+            {{ render_data_rows(mooring_details) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -397,15 +392,22 @@
             </tr>
         </thead>
         <tbody>
-            {% for weather_period_count in weather_period_counts %}
-                <tr class="table-row-action">
-                {% for field, value in weather_period_count.items() %}
-                    <td>{{ value }}</td>
-                {% endfor %}
-                </tr>
-            {% endfor %}
+            {{ render_data_rows(weather_period_counts) }}
         </tbody>
     </table>
+{% endmacro %}
+
+
+{% macro render_data_rows(
+    data_object_list
+) %}
+    {% for data_object in data_object_list %}
+        <tr class="table-row-action">
+        {% for field, value in data_object.items() %}
+            <td>{{ value }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
 {% endmacro %}
 
 
