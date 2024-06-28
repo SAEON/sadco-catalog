@@ -90,6 +90,12 @@ def currents_download(survey_id):
     return download(SurveyType.CURRENTS.value, survey_id)
 
 
+@bp.route(f'/download/{SurveyType.WEATHER.value}/<survey_id>', methods=('POST',))
+@api.view(SADCOScope.CURRENTS_DOWNLOAD)
+def weather_download(survey_id):
+    return download(SurveyType.WEATHER.value, survey_id)
+
+
 def download(survey_type, survey_id):
     data_type = get_download_data_type(survey_type)
 
@@ -121,6 +127,8 @@ def get_download_data_type(survey_type) -> str:
             return form.data['data_type']
         case SurveyType.CURRENTS:
             return 'currents'
+        case SurveyType.WEATHER:
+            return 'weather'
 
 
 def get_survey_type_template(survey_type) -> str:

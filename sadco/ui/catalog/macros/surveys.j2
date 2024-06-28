@@ -415,7 +415,7 @@
     current_user,
     survey
 ) %}
-    <form action="{{ url_for('surveys.currents_download', survey_id=survey['id'].replace("/", "-")) }}"
+    <form action="{{ url_for('surveys.weather_download', survey_id=survey['id'].replace("/", "-")) }}"
           method="post">
         <div>
             <p class="fw-bold mb-2">
