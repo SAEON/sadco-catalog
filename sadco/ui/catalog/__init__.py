@@ -24,6 +24,7 @@ def create_app():
             HydraScope.OFFLINE_ACCESS,
             SADCOScope.HYDRO_DOWNLOAD,
             SADCOScope.CURRENTS_DOWNLOAD,
+            SADCOScope.WEATHER_DOWNLOAD,
             ODPScope.TOKEN_READ
         ],
         CI_CLIENT_ID=sadco_config.SADCO.CATALOG.CI_CLIENT_ID,

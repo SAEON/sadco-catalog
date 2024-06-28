@@ -91,7 +91,7 @@ def currents_download(survey_id):
 
 
 @bp.route(f'/download/{SurveyType.WEATHER.value}/<survey_id>', methods=('POST',))
-@api.view(SADCOScope.CURRENTS_DOWNLOAD)
+@api.view(SADCOScope.WEATHER_DOWNLOAD)
 def weather_download(survey_id):
     return download(SurveyType.WEATHER.value, survey_id)
 
