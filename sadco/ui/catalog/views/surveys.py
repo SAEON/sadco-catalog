@@ -69,12 +69,11 @@ def search():
 def survey_detail(survey_type, survey_id):
     survey = cli.get(f'/survey/{survey_type}/{survey_id}')
 
-    form = get_survey_type_form(survey, survey_type)
-
     return render_template(
         get_survey_type_template(survey_type),
-        form=form,
-        survey=survey
+        form=get_survey_type_form(survey, survey_type),
+        survey=survey,
+        survey_type=survey_type
     )
 
 
@@ -94,6 +93,12 @@ def currents_download(survey_id):
 @api.view(SADCOScope.WEATHER_DOWNLOAD)
 def weather_download(survey_id):
     return download(SurveyType.WEATHER.value, survey_id)
+
+
+@bp.route(f'/download/{SurveyType.WAVES.value}/<survey_id>', methods=('POST',))
+@api.view(SADCOScope.WAVES_DOWNLOAD)
+def waves_download(survey_id):
+    return download(SurveyType.WAVES.value, survey_id)
 
 
 def download(survey_type, survey_id):
@@ -129,6 +134,8 @@ def get_download_data_type(survey_type) -> str:
             return 'currents'
         case SurveyType.WEATHER:
             return 'weather'
+        case SurveyType.WAVES:
+            return 'waves'
 
 
 def get_survey_type_template(survey_type) -> str:
@@ -141,9 +148,9 @@ def get_survey_type_template(survey_type) -> str:
         case SurveyType.CURRENTS:
             return 'currents_survey_detail.html'
         case SurveyType.WEATHER:
-            return 'weather_survey_detail.html'
+            return 'survey_periods_detail.html'
         case SurveyType.WAVES:
-            return ''
+            return 'survey_periods_detail.html'
         case SurveyType.ECHOSOUNDING:
             return ''
         case SurveyType.UTR:

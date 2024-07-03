@@ -358,41 +358,26 @@
 {% endmacro %}
 
 
-{% macro render_currents_download(
-    current_user,
-    survey
-) %}
-    <form action="{{ url_for('surveys.currents_download', survey_id=survey['id'].replace("/", "-")) }}"
-          method="post">
-        <div>
-            <p class="fw-bold mb-2">
-                Data Download
-            </p>
-            {{ download_button(current_user) }}
-        </div>
-    </form>
-{% endmacro %}
-
-
-{% macro render_weather_survey_detail(
-    weather_period_counts
+{% macro render_survey_periods_detail(
+    period_counts,
+    survey_type
 ) %}
      <p class="fw-bold mb-2 mx-2">
-        Weather Period Record Counts
+         {{ survey_type | title }} Period Record Counts
     </p>
 
     <table class="table table-hover">
         <thead>
             <tr>
-                {% for weather_period_count in weather_period_counts %}
-                    {% for field, value in weather_period_count.items() %}
+                {% for period_count in period_counts %}
+                    {% for field, value in period_count.items() %}
                         <th scope="col">{{ field | title | replace("_", " ") }}</th>
                     {% endfor %}
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
-            {{ render_data_rows(weather_period_counts) }}
+            {{ render_data_rows(period_counts) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -411,11 +396,12 @@
 {% endmacro %}
 
 
-{% macro render_weather_download(
+{% macro render_generic_survey_download(
     current_user,
-    survey
+    survey,
+    survey_type
 ) %}
-    <form action="{{ url_for('surveys.weather_download', survey_id=survey['id'].replace("/", "-")) }}"
+    <form action="{{ url_for('surveys.' + survey_type + '_download', survey_id=survey['id'].replace("/", "-")) }}"
           method="post">
         <div>
             <p class="fw-bold mb-2">
