@@ -25,6 +25,7 @@ def create_app():
             SADCOScope.HYDRO_DOWNLOAD,
             SADCOScope.CURRENTS_DOWNLOAD,
             SADCOScope.WEATHER_DOWNLOAD,
+            SADCOScope.WAVES_DOWNLOAD,
             ODPScope.TOKEN_READ
         ],
         CI_CLIENT_ID=sadco_config.SADCO.CATALOG.CI_CLIENT_ID,
