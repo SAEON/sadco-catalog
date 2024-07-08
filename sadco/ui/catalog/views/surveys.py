@@ -101,6 +101,12 @@ def waves_download(survey_id):
     return download(SurveyType.WAVES.value, survey_id)
 
 
+@bp.route(f'/download/{SurveyType.UTR.value}/<survey_id>', methods=('POST',))
+@api.view(SADCOScope.UTR_DOWNLOAD)
+def utr_download(survey_id):
+    return download(SurveyType.UTR.value, survey_id)
+
+
 def download(survey_type, survey_id):
     data_type = get_download_data_type(survey_type)
 
@@ -130,12 +136,9 @@ def get_download_data_type(survey_type) -> str:
         case SurveyType.HYDRO:
             form = HydroDownloadForm(request.form)
             return form.data['data_type']
-        case SurveyType.CURRENTS:
-            return 'currents'
-        case SurveyType.WEATHER:
-            return 'weather'
-        case SurveyType.WAVES:
-            return 'waves'
+        case _:
+            return survey_type
+
 
 
 def get_survey_type_template(survey_type) -> str:
@@ -146,7 +149,7 @@ def get_survey_type_template(survey_type) -> str:
         case SurveyType.HYDRO:
             return 'hydro_survey_detail.html'
         case SurveyType.CURRENTS:
-            return 'currents_survey_detail.html'
+            return 'mooring_survey_detail.html'
         case SurveyType.WEATHER:
             return 'survey_periods_detail.html'
         case SurveyType.WAVES:
@@ -154,7 +157,7 @@ def get_survey_type_template(survey_type) -> str:
         case SurveyType.ECHOSOUNDING:
             return ''
         case SurveyType.UTR:
-            return ''
+            return 'mooring_survey_detail.html'
         case SurveyType.VOS:
             return ''
         case SurveyType.UNKNOWN:
