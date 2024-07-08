@@ -369,10 +369,8 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                {% for period_count in period_counts %}
-                    {% for field, value in period_count.items() %}
-                        <th scope="col">{{ field | title | replace("_", " ") }}</th>
-                    {% endfor %}
+                {% for field, value in period_counts[0].items() %}
+                    <th scope="col">{{ field | title | replace("_", " ") }}</th>
                 {% endfor %}
             </tr>
         </thead>
