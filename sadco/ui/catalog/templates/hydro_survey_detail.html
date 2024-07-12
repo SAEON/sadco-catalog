@@ -2,12 +2,12 @@
 {% from 'surveys.j2' import render_hydro_survey_detail, render_hydro_download %}
 
 {% block survey_details %}
-    <div class="row">
-        <div class="col">
-            {{ render_hydro_survey_detail(survey) }}
-        </div>
-        <div class="col">
-            {{ render_hydro_download(current_user, survey, form) }}
-        </div>
+<div class="row">
+    <div class="col">
+        {{ render_hydro_survey_detail(survey) }}
     </div>
+    <div class="col">
+        {{ render_hydro_download(current_user, survey, form) }}
+    </div>
+</div>
 {% endblock %}

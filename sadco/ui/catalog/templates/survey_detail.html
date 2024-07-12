@@ -8,10 +8,16 @@
                 <div class="col px-2">
                     {{ render_survey_summary(survey) }}
 
-                    <div class="mt-2 bg-white-op p-2 rounded">
-                        {% block survey_details %}
-                        {% endblock %}
-                    </div>
+                    {% if self.survey_details() | trim %}
+                        <div class="mt-2 bg-white-op p-2 rounded">
+                    {% endif %}
+
+                    {% block survey_details %}
+                    {% endblock %}
+
+                    {% if self.survey_details() | trim %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="stations-map-wrapper col bg-white-op p-2 rounded" style="height: fit-content">
                     <p class="fw-bold mb-2">

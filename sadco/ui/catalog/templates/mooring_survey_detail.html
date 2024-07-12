@@ -2,10 +2,10 @@
 {% from 'surveys.j2' import render_currents_survey_detail, render_generic_survey_download %}
 
 {% block survey_details %}
-    <div class="d-flex flex-column">
-        {{ render_currents_survey_detail(survey.mooring_details) }}
-        <div class="ms-auto">
-            {{ render_generic_survey_download(current_user, survey, survey_type) }}
-        </div>
+<div class="d-flex flex-column">
+    {{ render_currents_survey_detail(survey.mooring_details) }}
+    <div class="ms-auto">
+        {{ render_generic_survey_download(current_user, survey, survey_type) }}
     </div>
+</div>
 {% endblock %}

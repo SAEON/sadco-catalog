@@ -2,10 +2,10 @@
 {% from 'surveys.j2' import render_survey_periods_detail, render_generic_survey_download, render_weather_download %}
 
 {% block survey_details %}
-    <div class="d-flex flex-column">
-        {{ render_survey_periods_detail(survey.period_counts, survey_type) }}
-        <div class="ms-auto">
-            {{ render_generic_survey_download(current_user, survey, survey_type) }}
-        </div>
+<div class="d-flex flex-column">
+    {{ render_survey_periods_detail(survey.period_counts, survey_type) }}
+    <div class="ms-auto">
+        {{ render_generic_survey_download(current_user, survey, survey_type) }}
     </div>
+</div>
 {% endblock %}

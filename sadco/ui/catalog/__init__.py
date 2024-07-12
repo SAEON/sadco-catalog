@@ -37,7 +37,9 @@ def create_app():
             SADCOScope.CURRENTS_READ,
             SADCOScope.WEATHER_READ,
             SADCOScope.WAVES_READ,
-            SADCOScope.UTR_READ
+            SADCOScope.UTR_READ,
+            SADCOScope.ECHO_SOUNDING_READ,
+            SADCOScope.UNKNOWN_READ
         ],
         SECRET_KEY=sadco_config.SADCO.CATALOG.FLASK_SECRET,
         CATALOG_TERMS_OF_USE='''

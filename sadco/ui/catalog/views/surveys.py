@@ -1,4 +1,4 @@
-from flask import Blueprint, send_file, redirect, render_template, request, url_for
+from flask import Blueprint, send_file, redirect, render_template, request, url_for, session
 from odp.ui.base import cli, api
 from io import BytesIO
 import zipfile
@@ -140,7 +140,6 @@ def get_download_data_type(survey_type) -> str:
             return survey_type
 
 
-
 def get_survey_type_template(survey_type) -> str:
     """
     Get a template specific to a survey type
@@ -148,19 +147,13 @@ def get_survey_type_template(survey_type) -> str:
     match survey_type:
         case SurveyType.HYDRO:
             return 'hydro_survey_detail.html'
-        case SurveyType.CURRENTS:
+        case SurveyType.CURRENTS | SurveyType.UTR:
             return 'mooring_survey_detail.html'
-        case SurveyType.WEATHER:
+        case SurveyType.WEATHER | SurveyType.WAVES:
             return 'survey_periods_detail.html'
-        case SurveyType.WAVES:
-            return 'survey_periods_detail.html'
-        case SurveyType.ECHOSOUNDING:
-            return ''
-        case SurveyType.UTR:
-            return 'mooring_survey_detail.html'
+        case SurveyType.ECHOSOUNDING | SurveyType.UNKNOWN:
+            return 'survey_detail.html'
         case SurveyType.VOS:
-            return ''
-        case SurveyType.UNKNOWN:
             return ''
 
 
