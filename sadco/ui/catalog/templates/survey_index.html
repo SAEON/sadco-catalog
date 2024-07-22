@@ -1,43 +1,43 @@
 {% extends 'base.html' %}
-{% from 'surveys.j2' import result_list, filter_panel %}
+{% from 'surveys.j2' import survey_result_list, filter_panel %}
 {% from 'controls.j2' import pagination, check_all %}
 
 {% set pagination %}
 <div class="my-4 mx-3">
     {{ pagination(
-            result.page,
-            result.pages,
-            result.total,
-            items_singular='survey',
-            items_plural='surveys',
-            **dict(request.args)
-        ) }}
+    result.page,
+    result.pages,
+    result.total,
+    items_singular='survey',
+    items_plural='surveys',
+    **dict(request.args)
+    ) }}
 </div>
 {% endset %}
 
 {% block main %}
-    <main class="flex-grow-1 m-3">
-        <div class="container-xl">
-            <div class="row mb-5">
-                <div class="col-3 mx-2">
-                    {{ filter_panel(form, result['sampling_devices'], result['survey_types'], **dict(request.args)) }}
-                </div>
-                <div class="col bg-white-op rounded" style="height: min-content">
-                    {{ pagination }}
-                    {{ result_list(result['items']) }}
-                    {% if result.total > 0 %}
-                        {{ pagination }}
-                    {% endif %}
-                </div>
+<main class="flex-grow-1 m-3">
+    <div class="container-xl">
+        <div class="row mb-5">
+            <div class="col-3 mx-2">
+                {{ filter_panel(form, result['sampling_devices'], result['survey_types'], **dict(request.args)) }}
+            </div>
+            <div class="col bg-white-op rounded" style="height: min-content">
+                {{ pagination }}
+                {{ survey_result_list(result['items']) }}
+                {% if result.total > 0 %}
+                {{ pagination }}
+                {% endif %}
             </div>
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}
 
 {% block scripts %}
-    {{ super() }}
-    <script>
-        createFilterMap();
-    </script>
+{{ super() }}
+<script>
+    createFilterMap();
+</script>
 {% endblock %}
 

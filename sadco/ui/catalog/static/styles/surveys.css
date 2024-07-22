@@ -16,3 +16,7 @@ body {
 .bg-white-op {
     background-color: rgba(var(--bs-white-rgb), 0.95) !important;
 }
+
+.font-weight-bold {
+    font-weight: bold;
+}

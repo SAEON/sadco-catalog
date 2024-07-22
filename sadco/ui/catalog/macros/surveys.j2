@@ -23,7 +23,7 @@
 {% endmacro %}
 
 
-{% macro result_list(
+{% macro survey_result_list(
     surveys
 ) %}
     <table class="table table-hover">
@@ -66,17 +66,19 @@
 
 {% macro filter_panel(
     form,
-    sampling_devices,
-    survey_types,
+    sampling_devices=none,
+    survey_types=none,
     show_search=false,
-    endpoint='.index'
+    endpoint='.index',
+    search_endpoint='surveys.search',
+    allow_search_by_id=true
 ) %}
     {# Render filtering and faceting panel.
        Query params can be passed via kwargs.
     #}
     {% set _ = kwargs.pop('page', none) %}
 
-    <form action="{{ url_for('surveys.search') }}" method="post" class="bg-white-op p-3 rounded">
+    <form action="{{ url_for(search_endpoint) }}" method="post" class="bg-white-op p-3 rounded">
         {{ form.csrf_token }}
 
         {% if show_search %}
@@ -97,13 +99,15 @@
 
         <input id="sort" name="sort" type="hidden" value="">
 
-        <div class="mb-4">
-            <p class="fw-bold mb-2">
-                Filter by survey id
-            </p>
-            {{ form.survey_id.label(class='form-label') }}
-            {{ form.survey_id(class='form-control mb-2', placeholder='#### / ####') }}
-        </div>
+        {% if allow_search_by_id %}
+            <div class="mb-4">
+                <p class="fw-bold mb-2">
+                    Filter by survey id
+                </p>
+                {{ form.survey_id.label(class='form-label') }}
+                {{ form.survey_id(class='form-control mb-2', placeholder='#### / ####') }}
+            </div>
+        {% endif %}
 
         <div class="mb-4">
             <p class="fw-bold mb-2">
@@ -144,75 +148,77 @@
         </button>
     </form>
 
-    <div class="accordion mt-2">
-        <div class="accordion-item mt-2 bg-white-op">
-            <h5 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#survey-types">
-                    Survey Types
-                </button>
-            </h5>
+    {% if survey_types or sampling_devices %}
+        <div class="accordion mt-2">
+            <div class="accordion-item mt-2 bg-white-op">
+                <h5 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#survey-types">
+                        Survey Types
+                    </button>
+                </h5>
 
-            <div id="survey-types" class="accordion-collapse collapse show">
-                <div class="accordion-body overflow-auto" style="max-height:72vh">
-                    {% for survey_type in survey_types %}
-                        <p class="card-text">
-                            {% set query = dict(kwargs) %}
-                            {% set code =  survey_type['code'] | string() %}
+                <div id="survey-types" class="accordion-collapse collapse show">
+                    <div class="accordion-body overflow-auto" style="max-height:72vh">
+                        {% for survey_type in survey_types %}
+                            <p class="card-text">
+                                {% set query = dict(kwargs) %}
+                                {% set code =  survey_type['code'] | string() %}
 
-                            {% if query.get('survey_type_code') == code %}
-                                {% set _ = query.pop('survey_type_code') %}
-                                <span class="fw-bold">{{ survey_type['name'] }}</span>
-                                <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
-                                    &#10005;
-                                </a>
-                            {% else %}
-                                {% set _ = query.update({ 'survey_type_code': code }) %}
-                                <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
-                                    {{ survey_type['name'] }}
-                                    <span>({{ survey_type['count'] }})</span>
-                                </a>
-                            {% endif %}
-                        </p>
-                    {% endfor %}
+                                {% if query.get('survey_type_code') == code %}
+                                    {% set _ = query.pop('survey_type_code') %}
+                                    <span class="fw-bold">{{ survey_type['name'] }}</span>
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
+                                        &#10005;
+                                    </a>
+                                {% else %}
+                                    {% set _ = query.update({ 'survey_type_code': code }) %}
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
+                                        {{ survey_type['name'] }}
+                                        <span>({{ survey_type['count'] }})</span>
+                                    </a>
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item bg-white-op">
+                <h5 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#sampling-devices">
+                        Sampling Devices
+                    </button>
+                </h5>
+
+                <div id="sampling-devices" class="accordion-collapse collapse show">
+                    <div class="accordion-body overflow-auto" style="max-height:72vh">
+                        {% for sampling_device in sampling_devices %}
+                            <p class="card-text">
+                                {% set query = dict(kwargs) %}
+                                {% set code =  sampling_device['code'] | string() %}
+
+                                {% if query.get('sampling_device_code') == code %}
+                                    {% set _ = query.pop('sampling_device_code') %}
+                                    <span class="fw-bold">{{ sampling_device['name'] }}</span>
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
+                                        &#10005;
+                                    </a>
+                                {% else %}
+                                    {% set _ = query.update({ 'sampling_device_code': code }) %}
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
+                                        {{ sampling_device['name'] }}
+                                        <span>({{ sampling_device['count'] }})</span>
+                                    </a>
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="accordion-item bg-white-op">
-            <h5 class="accordion-header">
-                <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#sampling-devices">
-                    Sampling Devices
-                </button>
-            </h5>
-
-            <div id="sampling-devices" class="accordion-collapse collapse show">
-                <div class="accordion-body overflow-auto" style="max-height:72vh">
-                    {% for sampling_device in sampling_devices %}
-                        <p class="card-text">
-                            {% set query = dict(kwargs) %}
-                            {% set code =  sampling_device['code'] | string() %}
-
-                            {% if query.get('sampling_device_code') == code %}
-                                {% set _ = query.pop('sampling_device_code') %}
-                                <span class="fw-bold">{{ sampling_device['name'] }}</span>
-                                <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
-                                    &#10005;
-                                </a>
-                            {% else %}
-                                {% set _ = query.update({ 'sampling_device_code': code }) %}
-                                <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
-                                    {{ sampling_device['name'] }}
-                                    <span>({{ sampling_device['count'] }})</span>
-                                </a>
-                            {% endif %}
-                        </p>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
+    {% endif %}
 {% endmacro %}
 
 {% macro render_survey_summary(
@@ -222,7 +228,6 @@
 
     <ul class="nav nav-tab" role="tablist">
         <li class="nav-item bg-white-op rounded-top" role="presentation">
-            {#<button class="nav-link active" data-bs-toggle="tab" data-bs-target="#info" type="button" role="tab">#}
             <div class="nav-link active">
                 {% if survey.id %}
                     ID:
@@ -233,7 +238,6 @@
                     No ID
                 {% endif %}
             </div>
-            {#</button>#}
         </li>
     </ul>
 
@@ -338,7 +342,7 @@
         Mooring Details
     </p>
 
-        <table class="table table-hover">
+    <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">Depth</th>
@@ -352,7 +356,7 @@
         </tr>
         </thead>
         <tbody>
-            {{ render_data_rows(mooring_details) }}
+        {{ render_data_rows(mooring_details) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -362,20 +366,20 @@
     period_counts,
     survey_type
 ) %}
-     <p class="fw-bold mb-2 mx-2">
-         {{ survey_type | title }} Period Record Counts
+    <p class="fw-bold mb-2 mx-2">
+        {{ survey_type | title }} Period Record Counts
     </p>
 
     <table class="table table-hover">
         <thead>
-            <tr>
-                {% for field, value in period_counts[0].items() %}
-                    <th scope="col">{{ field | title | replace("_", " ") }}</th>
-                {% endfor %}
-            </tr>
+        <tr>
+            {% for field, value in period_counts[0].items() %}
+                <th scope="col">{{ field | title | replace("_", " ") }}</th>
+            {% endfor %}
+        </tr>
         </thead>
         <tbody>
-            {{ render_data_rows(period_counts) }}
+        {{ render_data_rows(period_counts) }}
         </tbody>
     </table>
 {% endmacro %}
@@ -386,9 +390,9 @@
 ) %}
     {% for data_object in data_object_list %}
         <tr class="table-row-action">
-        {% for field, value in data_object.items() %}
-            <td>{{ value }}</td>
-        {% endfor %}
+            {% for field, value in data_object.items() %}
+                <td>{{ value }}</td>
+            {% endfor %}
         </tr>
     {% endfor %}
 {% endmacro %}
@@ -411,18 +415,32 @@
 {% endmacro %}
 
 
+{% macro render_vos_survey_download(
+    current_user
+) %}
+    <form action="{{ url_for('vos_surveys.download') }}"
+          method="post">
+        <div>
+            <p class="fw-bold mb-2">
+                Data Download
+            </p>
+            {{ download_button(current_user) }}
+        </div>
+    </form>
+{% endmacro %}
+
 {% macro download_button(
     current_user
 ) %}
     <span class="d-inline-block"
-        {% if not current_user or not current_user.is_authenticated %}
-            data-toggle="tooltip" title="Please login/sign up"
-        {% endif %}
+            {% if not current_user or not current_user.is_authenticated %}
+          data-toggle="tooltip" title="Please login/sign up"
+            {% endif %}
     >
         <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#download-popup"
-            {% if not current_user or not current_user.is_authenticated %}
+                {% if not current_user or not current_user.is_authenticated %}
                 disabled
-            {% endif %}
+                {% endif %}
         >
             Download &#x1f4e5;
         </button>

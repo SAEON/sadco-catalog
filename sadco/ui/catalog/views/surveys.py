@@ -1,10 +1,9 @@
-from flask import Blueprint, send_file, redirect, render_template, request, url_for, session
+from flask import Blueprint, redirect, render_template, request, url_for
 from odp.ui.base import cli, api
-from io import BytesIO
-import zipfile
 from sadco.const import SurveyType
 from odp.ui.base.forms import BaseForm
 from sadco.ui.catalog.forms import SearchForm, HydroDownloadForm
+from sadco.ui.catalog.lib import download_zipped_file
 from sadco.const import DataType, SADCOScope
 
 bp = Blueprint('surveys', __name__, static_folder='../static')
@@ -28,7 +27,7 @@ def index():
     page = request.args.get('page', 1)
 
     result = cli.get(
-        f'/survey/surveys/search',
+        '/survey/surveys/search',
         survey_id=survey_id,
         north_bound=north_bound,
         east_bound=east_bound,
@@ -117,18 +116,7 @@ def download(survey_type, survey_id):
 
     file_name = f'survey_{survey_id}_{data_type}.zip'
 
-    zip_buffer = BytesIO()
-    with zipfile.ZipFile(zip_buffer, mode='w') as zip_file:
-        zip_file.writestr(file_name, survey_data)
-
-    zip_buffer.seek(0)
-
-    return send_file(
-        zip_buffer,
-        mimetype='application/zip',
-        as_attachment=True,
-        download_name=file_name
-    )
+    return download_zipped_file(file_name, survey_data)
 
 
 def get_download_data_type(survey_type) -> str:
@@ -182,19 +170,18 @@ def get_hydro_download_form(survey) -> HydroDownloadForm:
 
         if data_type_detail is None:
             continue
-        data_type_choices.append((data_type, data_type.title().replace('_', ' ')))
 
-        if not has_water_chemistry_and_nutrients and data_type_detail.get(
-                DataType.WATERCHEMISTRY) and data_type_detail.get(DataType.WATERNUTRIENTS):
-            has_water_chemistry_and_nutrients = True
+        data_type_choices.append((data_type, data_type.title().replace('_', ' ')))
 
         for sub_data_type, sub_data_type_detail in data_type_detail.items():
 
             if sub_data_type != 'record_count' and sub_data_type_detail is not None:
                 data_type_choices.append((sub_data_type, sub_data_type.title().replace('_', ' ')))
 
-        if has_water_chemistry_and_nutrients:
-            has_water_chemistry_and_nutrients = False
+        # Appears within loop so that water and chemistry option shows in the right order
+        if not has_water_chemistry_and_nutrients and data_type_detail.get(
+                DataType.WATERCHEMISTRY) and data_type_detail.get(DataType.WATERNUTRIENTS):
+            has_water_chemistry_and_nutrients = True
             data_type_choices.append(
                 (DataType.WATERNUTRIENTSANDCHEMISTRY.value,
                  DataType.WATERNUTRIENTSANDCHEMISTRY.title().replace('_', ' ')))

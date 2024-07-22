@@ -4,7 +4,7 @@
 {% block main %}
 <main class="home-main-wrapper d-flex flex-grow-1 align-items-center justify-content-evenly">
     <div class="container-sm home-main-content">
-        <div class="row">
+        <div class="row" style="display: none">
             <div class="col-sm-3 mx-auto d-flex flex-column gap-2">
                 {{ search_box(
                 search_form,
@@ -17,6 +17,22 @@
                     <button onclick="window.location.href='{{ url_for('surveys.index') }}';" class="btn btn-primary"
                             type="button">Browse the Catalog &#128214;
                     </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 mx-auto d-flex">
+                <div class="row">
+                    <div class="col mx-4 d-flex flex-column justify-content-end" role="button"
+                         onclick="window.location.href='{{ url_for('surveys.index') }}';">
+                        <img class="w-100" src="{{ url_for('.static', filename='images/noun-buoy-7876.png') }}">
+                        <p class="mx-auto text-white font-weight-bold">View Marine Data</p>
+                    </div>
+                    <div class="col mx-4 d-flex flex-column justify-content-end" role="button"
+                         onclick="window.location.href='{{ url_for('vos_surveys.index') }}';">
+                        <img class="w-100" src="{{ url_for('.static', filename='images/noun-ship-6999820.png') }}">
+                        <p class="mx-auto text-white font-weight-bold">View VOS Data</p>
+                    </div>
                 </div>
             </div>
         </div>

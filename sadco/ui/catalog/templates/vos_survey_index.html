@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% from 'surveys.j2' import filter_panel, render_vos_survey_download %}
+
+{% block main %}
+<main class="flex-grow-1 m-3">
+    <div class="container-xl">
+        <div class="row mb-2">
+            <div class="col-6 mx-auto">
+                {{ filter_panel(form, allow_search_by_id=false, search_endpoint='vos_surveys.search',
+                **dict(request.args)) }}
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-6 mx-auto">
+                <div class="bg-white-op rounded p-3 d-flex justify-content-between">
+                    <div>
+                        <p class="fw-bold mb-2">
+                            Filtered Results
+                        </p>
+                        Number of Records: {{ result['total'] }}
+                    </div>
+                    <div>
+                        {{ render_vos_survey_download(current_user) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    createFilterMap();
+</script>
+{% endblock %}
+
