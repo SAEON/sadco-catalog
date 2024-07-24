@@ -4,22 +4,6 @@
 {% block main %}
 <main class="home-main-wrapper d-flex flex-grow-1 align-items-center justify-content-evenly">
     <div class="container-sm home-main-content">
-        <div class="row" style="display: none">
-            <div class="col-sm-3 mx-auto d-flex flex-column gap-2">
-                {{ search_box(
-                search_form,
-                placeholder='Search a Survey ID'
-                ) }}
-                <div class="mx-auto text-white">
-                    or
-                </div>
-                <div class="mx-auto">
-                    <button onclick="window.location.href='{{ url_for('surveys.index') }}';" class="btn btn-primary"
-                            type="button">Browse the Catalog &#128214;
-                    </button>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-sm-4 mx-auto d-flex">
                 <div class="row">

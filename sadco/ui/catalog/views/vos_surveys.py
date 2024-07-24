@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, request, url_for, sessio
 from odp.ui.base import cli, api
 from sadco.ui.catalog.forms import SearchForm
 from sadco.ui.catalog.lib import download_zipped_file
+from sadco.const import SADCOScope
 
 bp = Blueprint('vos_surveys', __name__, static_folder='../static')
 
@@ -34,6 +35,7 @@ def search():
 
 
 @bp.route('/vos_download')
+@api.view(SADCOScope.VOS_DOWNLOAD)
 def vos_download():
     search_bounds = session['search_bounds']
 
@@ -48,6 +50,7 @@ def vos_download():
 
 
 @bp.route('/download', methods=('POST',))
+@api.view(SADCOScope.VOS_DOWNLOAD)
 def download():
     query = get_search_query()
 

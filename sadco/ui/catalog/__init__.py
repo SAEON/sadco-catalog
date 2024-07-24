@@ -27,6 +27,7 @@ def create_app():
             SADCOScope.WEATHER_DOWNLOAD,
             SADCOScope.WAVES_DOWNLOAD,
             SADCOScope.UTR_DOWNLOAD,
+            SADCOScope.VOS_DOWNLOAD,
             ODPScope.TOKEN_READ
         ],
         CI_CLIENT_ID=sadco_config.SADCO.CATALOG.CI_CLIENT_ID,
@@ -39,7 +40,8 @@ def create_app():
             SADCOScope.WAVES_READ,
             SADCOScope.UTR_READ,
             SADCOScope.ECHO_SOUNDING_READ,
-            SADCOScope.UNKNOWN_READ
+            SADCOScope.UNKNOWN_READ,
+            SADCOScope.VOS_READ
         ],
         SECRET_KEY=sadco_config.SADCO.CATALOG.FLASK_SECRET,
         CATALOG_TERMS_OF_USE='''
