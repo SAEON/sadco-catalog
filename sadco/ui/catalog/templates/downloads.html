@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% from 'surveys.j2' import filter_panel %}
+{% from 'downloads.j2' import downloads_list, downloads_audit_navigation %}
+{% from 'controls.j2' import pagination, check_all %}
+
+{% set pagination %}
+<div class="my-4 mx-3">
+    {{ pagination(
+    result.page,
+    result.pages,
+    result.total,
+    items_singular='download',
+    items_plural='downloads',
+    **dict(request.args)
+    ) }}
+</div>
+{% endset %}
+
+{% block main %}
+<main class="flex-grow-1 m-3">
+    <div class="container-xl">
+        <div class="row mb-5 justify-content-center">
+            <div class="col-4 bg-white-op rounded" style="height: min-content">
+                <h3 class="py-2">Downloads Audit</h3>
+                {{ downloads_audit_navigation(downloads_type) }}
+                <hr>
+                {{ pagination }}
+                {{ downloads_list(result['items']) }}
+                {% if result.total > 0 %}
+                {{ pagination }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% endblock %}

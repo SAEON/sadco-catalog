@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from flask import Flask
-from jinja2 import ChoiceLoader, FileSystemLoader
 
 from sadco.config import sadco_config
 from sadco.const import SADCOScope
@@ -28,6 +27,8 @@ def create_app():
             SADCOScope.WAVES_DOWNLOAD,
             SADCOScope.UTR_DOWNLOAD,
             SADCOScope.VOS_DOWNLOAD,
+            SADCOScope.DOWNLOAD_READ,
+            SADCOScope.DOWNLOAD_ADMIN,
             ODPScope.TOKEN_READ
         ],
         CI_CLIENT_ID=sadco_config.SADCO.CATALOG.CI_CLIENT_ID,

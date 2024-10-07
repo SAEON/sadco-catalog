@@ -73,9 +73,6 @@
     search_endpoint='surveys.search',
     allow_search_by_id=true
 ) %}
-    {# Render filtering and faceting panel.
-       Query params can be passed via kwargs.
-    #}
     {% set _ = kwargs.pop('page', none) %}
 
     <form action="{{ url_for(search_endpoint) }}" method="post" class="bg-white-op p-3 rounded">
