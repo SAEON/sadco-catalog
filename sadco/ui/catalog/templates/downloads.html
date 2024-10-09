@@ -3,6 +3,8 @@
 {% from 'downloads.j2' import downloads_list, downloads_audit_navigation %}
 {% from 'controls.j2' import pagination, check_all %}
 
+{% set pagination_endpoint = 'index' if downloads_type == 'my' else 'all_downloads' %}
+
 {% set pagination %}
 <div class="my-4 mx-3">
     {{ pagination(
@@ -11,6 +13,7 @@
     result.total,
     items_singular='download',
     items_plural='downloads',
+    endpoint='download_audit.{}'.format(pagination_endpoint),
     **dict(request.args)
     ) }}
 </div>
@@ -22,7 +25,9 @@
         <div class="row mb-5 justify-content-center">
             <div class="col-4 bg-white-op rounded" style="height: min-content">
                 <h3 class="py-2">Downloads Audit</h3>
-                {{ downloads_audit_navigation(downloads_type) }}
+                {% if all_downloads_required_scope in g.user_permissions %}
+                    {{ downloads_audit_navigation(downloads_type) }}
+                {% endif %}
                 <hr>
                 {{ pagination }}
                 {{ downloads_list(result['items']) }}
