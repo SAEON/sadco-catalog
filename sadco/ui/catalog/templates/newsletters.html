@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% from 'surveys.j2' import newsletter_download_links %}
+
+{% block main %}
+    <main class="flex-grow-1 m-3">
+        <div class="container-xl" style="max-width: 800px">
+            <div class="row mb-5">
+                <div class="bg-white-op rounded p-4">
+                    <h1>Newsletters</h1>
+                    <hr>
+                    <p>
+                        SADCO published a quarterly newsletter up until 2011, through which users were informed about
+                        new data,
+                        software, etc. Click on one of the links to download that volume as a pdf.
+                    </p>
+                    <div class="d-flex flex-column flex-wrap">
+                        {{ newsletter_download_links(newsletters_list) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+

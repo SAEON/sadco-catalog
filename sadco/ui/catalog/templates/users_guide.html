@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <main class="flex-grow-1 m-3">
+        <div class="container-xl" style="max-width: 800px">
+            <div class="row mb-5">
+                <div class="bg-white-op rounded p-4">
+                    <h1>User's Guide</h1>
+                    <hr>
+                    <p>Upon arriving at the SADCO home page the user is presented with the option of accessing Marine or
+                        Voluntary Observing Ships (VOS) data. Either two can be accessed by clicking on the
+                        corresponding icon or by choosing the desired option from the ‘Data Access’ dropdown.
+                    </p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="{{ url_for('.static', filename='images/marine_filter_panel.png') }}"
+                                 style="width: 100%">
+                        </div>
+                        <div class="col-md-8">
+                            <h2>Marine Data</h2>
+                            <hr>
+                            <h3>Filtering</h3>
+                            <p>
+                                The marine data page initially has an unfiltered list of all the Marine data surveys.
+                                There is a filter panel to the left of the list with filtering options.
+                            </p>
+                            <h4>Filter by Survey ID</h4>
+                            <p>
+                                Use this option if the Survey ID is known. Only part of the Survey ID can also be filled
+                                in and matching surveys will be displayed
+                            </p>
+                            <h4>Filter by Location</h4>
+                            <p>
+                                Use the “Draw a Rectangle” option on the map to draw a bounding box around the required
+                                area. The “Exclusive Region” checkbox can also be selected to exclude the specified area
+                                from the search results.
+                            </p>
+                            <p>
+                                If any of the stations that belong to a survey appear within the specified area, that
+                                entire survey will be displayed in the results list.
+                            </p>
+                            <h4>Filter by date range</h4>
+                            <p>
+                                Select a start and end date to show surveys from within those dates. The “Exclusive
+                                Interval” option can also be checked to show only the surveys that fall outside of that
+                                date range.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row pt-4">
+                        <div class="col-md-8">
+                            <h4>Survey Types, Institutes and Sampling Devices</h4>
+                            <p>
+                                A list of Survey Types, Institutes or Sampling Devices appears on the left below the
+                                first filtering panel. Either of the lists can be expanded or collapsed. The list
+                                displays all the items in that list along with the number of records that conform to
+                                that list in brackets next to the item. Click on an item to filter the list according to
+                                that item.
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="{{ url_for('.static', filename='images/search_facets.png') }}"
+                                 style="width: 100%">
+                        </div>
+                    </div>
+                    <div class="row pt-4">
+                        <h3>Viewing/Downloading Specific Survey</h3>
+                        <p>
+                            Once a specific survey has been found using the filtering tools, it can be selected by
+                            clicking on the corresponding ‘ID’ from the filtered list. High level data specific to that
+                            survey and unique to the Survey Type will be displayed.
+                        </p>
+                        <img src="{{ url_for('.static', filename='images/view_survey_detail.png') }}"
+                             style="width: 100%" class="my-4">
+                        <h4>Downloading</h4>
+                        <p>
+                            A user needs to be logged-in in order to download data. Click the ‘login’ button in the top
+                            right corner in order to log in or register. Once logged in click the ‘Download’ button to
+                            download the data specific to that survey. For the ‘hydro’ data type, a data type needs to
+                            be selected from the dropdown to download that specific data type that was collected as a
+                            part of that survey. The data will be downloaded in a csv file format.
+                        </p>
+                    </div>
+                    <div class="row pt-4">
+                        <div class="col-md-6">
+                            <img src="{{ url_for('.static', filename='images/vos_panel.png') }}"
+                                 style="width: 100%">
+                        </div>
+                        <div class="col-md-6">
+                            <h2>VOS Data</h2>
+                            <hr>
+                            <p>
+                                VOS data does not contain header data for specific voyages. There is therefore no
+                                filtered list, just a display of how many records are filtered.
+                            </p>
+                            <h3>Filtering</h3>
+                            <p>
+                                VOS data can be filtered by inclusive and exclusive physical and temporal extent.
+                                Filtering by physical extent can be done by selecting the ‘draw a rectangle’ icon on the
+                                map and drawing a rectangle around the area in question. Filtering by temporal extent
+                                can be done by selecting a start and an end date. Exclusive region or interval can be
+                                chosen to show records that fall outside the chosen bounds.
+                            </p>
+                            <h3>Downloading</h3>
+                            <p>
+                                Once the filters have been chosen, click ‘Apply’ to apply the filter. The record number
+                                will be updated and then the data can be downloaded. As with the Marine Data, the user
+                                needs to be logged-in in order to download.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+

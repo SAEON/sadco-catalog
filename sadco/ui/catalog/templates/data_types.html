@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <main class="flex-grow-1 m-3">
+        <div class="container-xl" style="max-width: 800px">
+            <div class="row mb-5">
+                <div class="bg-white-op rounded p-4">
+                    <h1>Data Types</h1>
+                    <hr>
+                    <p>
+                        SADCO stores data from the south-eastern Atlantic Ocean, the south-western Indian Ocean and the
+                        Southern Ocean, in a target area extending from 10°N to 70°S and 30°W to 70°E. Data is obtained
+                        from local marine organisations, universities, the South African Weather Service, and from
+                        international data sources.
+                        <br>
+                        The data includes:
+                    </p>
+                    <ul>
+                        <li>
+                            Hydrographic station data with vertical profiles of temperature, salinity, oxygen,
+                            nutrients, etc. SADCO has about 326 300 stations since 1900.
+                        </li>
+                        <li>Instruments include CTD, MBT, XBT, bottles, ARGO floats.</li>
+                        <li>
+                            Surface weather reports from voluntary observing ships (VOS) including waves, wind, swell,
+                            sea-surface temperature, etc. There are about 7.3 million reports with about 64 million
+                            observations since 1660.
+                        </li>
+                        <li>Moored current meter and ADCP data since 1970.</li>
+                        <li>Moored thermistor string data since 1990.</li>
+                        <li>Underway ADCP data since 2000.</li>
+                        <li>Automatic Weather Station data along the coast since about 1982.</li>
+                        <li>Chemical data (in the water column, organic tissue and in sediment).</li>
+                        <li>Underwater temperature recording (UTR) data since 1990.</li>
+                        <li>Wave data from wave buoys since 1977.</li>
+                    </ul>
+                    <h5>Quality Control</h5>
+                    <p>The quality control procedures for the various types of data are described in the
+                        Newsletters.</p>
+                    <ul>
+                        <li>
+                            <strong>Hydrographic stations:</strong> To conform with international checks, the QC flags
+                            of the World Ocean
+                            Database (WOD) were adopted, so that data obtained from the World Data Centre (WDC) could be
+                            be integrated almost seamlessly into the existing SADCO data base. The QC process involves 3
+                            groups of checks, namely checks of the <strong>station</strong> information, checks of the
+                            <strong>profiles</strong> and
+                            checks of the <strong>subsurface observations</strong>. No flags are installed for the
+                            station checks
+                            (stations are either accepted – sometimes with small corrections - or rejected). For the
+                            <strong>profile</strong> and <strong>observation</strong> checks, flags are allocated per
+                            parameter (e.g. temperature,
+                            salinity, nutrients,...) and the flags installed by SADCO are a subset of the WOD flags plus
+                            a spike check. The variables that are checked are: depth, temperature, salinity, oxygen,
+                            phosphate, silicate, nitrate, pH, dissolved inorganic carbon (DIC) and total chlorophyll.
+                            For a more complete description, please see SADCO newsletter
+                            <a href="{{ url_for('home.newsletter_download', year='2007', file_name='vol18no3.pdf') }}"
+                               target="_blank">Vol. 18 No. 3 (August 2007)</a>
+                        </li>
+                        <li>
+                            <strong>VOS:</strong> The World Meteorological Organisation quality control screens are used
+                            on SADCO's VOS data. For a complete description, please see page 4 of
+                            <a href="{{ url_for('home.newsletter_download', year='2002', file_name='vol13no2.pdf') }}"
+                               target="_blank">Vol. 13 No. 2 (June 2002)</a> and
+                            <a href="{{ url_for('home.newsletter_download', year='2002', file_name='vol13no3.pdf') }}">
+                                Vol. 13 No. 3 (September 2002)</a>
+                        </li>
+                        <li>
+                            <strong>Time series data:</strong> Automatic checking for time series data are checked
+                            visually. Current
+                            meter data are checked for the following: Metadata checks (latitude, longitude, institute,
+                            date, time), broad range check, spikes, noisiness, sensor drift, visible gaps and/or
+                            pre-deployment leaders or post-recovery trailers. Weather data are checked for the
+                            following: Metadata checks (latitude, longitude, institute, date, time), broad range checks,
+                            spikes, sensor drift, data gaps, data shift, sensor jammed. For a further description of the
+                            criteria, please see SADCO newsletters
+                            <a href="{{ url_for('home.newsletter_download', year='2008', file_name='vol19no4.pdf') }}"
+                               target="_blank">Vol. 19 No. 4 (December 2008)</a> and
+                            <a href="{{ url_for('home.newsletter_download', year='2010', file_name='vol21no1.pdf') }}"
+                               target="_blank">Vol. 21 No. 1 (February 2010)</a>
+                        </li>
+                    </ul>
+
+                    <h5>AFROBIS</h5>
+                    <p>A large amount of biogeographic data has been loaded in
+                        <a href="http://afrobis.csir.co.za" target="_blank">AfrOBIS</a>, the African Node for the Ocean
+                        Biogeographic Information System. This database as well as the global information in OBIS, is
+                        freely accessible, and contains search, plotting and download facilities
+                    </p>
+
+                    <h5>Target Area</h5>
+                    <img src="{{ url_for('.static', filename='images/sadco_targetarea.jpg') }}" style="width: 100%">
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+

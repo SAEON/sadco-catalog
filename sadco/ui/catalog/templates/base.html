@@ -1,45 +1,36 @@
 {% extends 'layout.html' %}
 {% from 'lib.j2' import bootswatch_spacelab_css, jquery_js, leaflet_js, leaflet_css %}
 {% from 'page.j2' import nav_logo, nav_title, nav_menu, footer %}
+{% from 'surveys.j2' import nav_bar_items %}
 
 {% block web_title %}
     Southern African Data Centre for Oceanography
 {% endblock %}
 
 {% block favicon %}
-    <link rel="icon" href="{{ url_for('static', filename='images/mims-icon-32x32.png') }}" sizes="32x32" />
-    <link rel="icon" href="{{ url_for('static', filename='images/mims-icon-192x192.png') }}" sizes="192x192" />
+    <link rel="icon" href="{{ url_for('static', filename='images/mims-icon-32x32.png') }}" sizes="32x32"/>
+    <link rel="icon" href="{{ url_for('static', filename='images/mims-icon-192x192.png') }}" sizes="192x192"/>
 {% endblock %}
 
 {% block header %}
-    <nav class="navbar navbar-expand-lg bg-white shadow-sm px-2 py-3 sticky-top">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-white shadow-sm sticky-top">
         <div class="container-fluid">
             <img src="{{ url_for('static', filename='images/mims-logo.png') }}" height="70">
             <div class="d-flex flex-column mims-logo-color fs-5 mx-4 mt-2">
                 <span class="fw-semibold">Southern African Data Centre for Oceanography</span>
                 <span class="">Southern Africa's historical oceans and coastal data archive</span>
             </div>
-            <div class="navbar-nav justify-content-end flex-grow-1 mt-2">
-                {{ nav_menu(
-                    current_user,
-                    request.blueprint,
-                    home='Home',
-                    surveys='Marine Database',
-                    vos_surveys='VOS Database',
-                    download_audit='Downloads',
-                    wiki=false
-                ) }}
-            </div>
+            {{ nav_bar_items( current_user ) }}
         </div>
     </nav>
 {% endblock %}
 
 {% block footer %}
     <footer class="text-white">
-        <div class="mims-bg-color-light" style="height: 150px">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="pt-3">
-                    <p class="py-5 text-center" style="max-width: 350px">
+        <div class="mims-bg-color-light">
+            <div class="d-flex justify-content-between align-items-center py-4 flex-wrap">
+                <div class="pt-3 d-flex flex-column">
+                    <p class="text-center" style="max-width: 350px">
                         SADCO is managed by the National
                         <a href="https://www.ocims.gov.za/" target="_blank" class="text-decoration-none">
                             Oceans and Coasts Information Management System
@@ -47,23 +38,44 @@
                         (OCIMS).
                     </p>
                 </div>
-                <div class="pe-5">
-                    <a href="https://www.ocims.gov.za/" target="_blank" class="p-5">
+                <div class="centered-ocims">
+                    <a href="https://www.ocims.gov.za/" target="_blank">
                         <img src="{{ url_for('static', filename='images/ocims-logo.png') }}">
                     </a>
                 </div>
-                <span class="align-self-end p-2">
-                    Photo by <a href="https://unsplash.com/@zakharyak?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Maksym Zakharyak</a> on <a href="https://unsplash.com/photos/a-person-riding-a-surfboard-on-a-wave-in-the-ocean-0V39-QUxaic?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
-                </span>
+                <div class="d-flex">
+                    <a href="https://www.dffe.gov.za/" target="_blank" class="m-3">
+                        <img src="{{ url_for('static', filename='images/dffe-logo.png') }}" style="height: 50px">
+                    </a>
+                    <a href="https://www.saeon.ac.za/" target="_blank" class="m-3">
+                        <img src="{{ url_for('static', filename='images/saeon-logo.png') }}" style="height: 50px">
+                    </a>
+                    <a href="https://www.csir.co.za/" target="_blank" class="m-3">
+                        <img src="{{ url_for('.static', filename='images/csir-logo.png') }}" style="height: 50px">
+                    </a>
+                    <a href="https://mfmr.gov.na/" target="_blank" class="m-3">
+                        <img src="{{ url_for('.static', filename='images/sa-navy-logo.png') }}" style="height: 50px">
+                    </a>
+                    <a href="https://mfmr.gov.na/" target="_blank" class="m-3">
+                        <img src="{{ url_for('.static', filename='images/namibia-logo.png') }}" style="height: 50px">
+                    </a>
+                </div>
             </div>
         </div>
         <div class="mims-bg-color-mid" style="height: 60px">
-            <div class="d-flex justify-content-center align-items-center">
-                <p class="pt-4">
-                    Copyright &copy; <script>document.write(new Date().getFullYear())</script>
+            <div class="d-flex justify-content-between align-items-center">
+                <p class="px-3 mt-4">
+                    Copyright &copy;
+                    <script>document.write(new Date().getFullYear())</script>
                     <a href="https://www.dffe.gov.za/" target="_blank" class="text-decoration-none text-white">
                         Department of Forestry, Fisheries and the Environment
                     </a>
+                </p>
+                <p class="px-3 mt-4">
+                    Photo by <a class="text-decoration-underline text-white"
+                        href="https://unsplash.com/@zakharyak?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Maksym
+                    Zakharyak</a> on <a class="text-decoration-underline text-white"
+                        href="https://unsplash.com/photos/a-person-riding-a-surfboard-on-a-wave-in-the-ocean-0V39-QUxaic?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Unsplash</a>
                 </p>
             </div>
         </div>

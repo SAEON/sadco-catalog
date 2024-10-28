@@ -1,5 +1,55 @@
 {% from 'content.j2' import render_info %}
 
+{% macro nav_bar_items(
+    current_user
+) %}
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
+            aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarColor04">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home.index') }}">Home</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                   aria-haspopup="true" aria-expanded="false">Data Access</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ url_for('surveys.index') }}">Marine Data</a>
+                    <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">VOS Data</a>
+                    <a class="dropdown-item" href="{{ url_for('download_audit.index') }}">Download Audit</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ url_for('home.data_types') }}">Data Types</a>
+                    <a class="dropdown-item" href="{{ url_for('home.users_guide') }}">User's Guide</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home.history') }}">History</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('home.newsletters') }}">Newsletters</a>
+            </li>
+            {{ login_nav_item( current_user ) }}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro login_nav_item(
+    current_user
+) %}
+    {% if current_user %}
+        {% if current_user.is_authenticated %}
+            <li class="nav-item border-left border-light"><a href="{{ url_for('hydra.logout') }}" class="nav-link">
+                Log out {{ current_user.email }}
+            </a></li>
+        {% else %}
+            <li class="nav-item border-left border-light"><a href="{{ url_for('hydra.login') }}" class="nav-link">
+                Log in
+            </a></li>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
 
 {% macro search_box(
     form,
@@ -68,6 +118,7 @@
     form,
     sampling_devices=none,
     survey_types=none,
+    institutes=none,
     show_search=false,
     endpoint='.index',
     search_endpoint='surveys.search',
@@ -145,17 +196,17 @@
         </button>
     </form>
 
-    {% if survey_types or sampling_devices %}
+    {% if survey_types or sampling_devices or institutes %}
         <div class="accordion mt-2">
             <div class="accordion-item mt-2 bg-white-op">
                 <h5 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#survey-types">
                         Survey Types
                     </button>
                 </h5>
 
-                <div id="survey-types" class="accordion-collapse collapse show">
+                <div id="survey-types" class="accordion-collapse collapse">
                     <div class="accordion-body overflow-auto" style="max-height:72vh">
                         {% for survey_type in survey_types %}
                             <p class="card-text">
@@ -183,13 +234,47 @@
 
             <div class="accordion-item bg-white-op">
                 <h5 class="accordion-header">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#institutes">
+                        Institutes
+                    </button>
+                </h5>
+
+                <div id="institutes" class="accordion-collapse collapse">
+                    <div class="accordion-body overflow-auto" style="max-height:72vh">
+                        {% for institute in institutes %}
+                            <p class="card-text">
+                                {% set query = dict(kwargs) %}
+                                {% set code =  institute['code'] | string() %}
+
+                                {% if query.get('institute_code') == code %}
+                                    {% set _ = query.pop('institute_code') %}
+                                    <span class="fw-bold">{{ institute['name'] }}</span>
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
+                                        &#10005;
+                                    </a>
+                                {% else %}
+                                    {% set _ = query.update({ 'institute_code': code }) %}
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
+                                        {{ institute['name'] }}
+                                        <span>({{ institute['count'] }})</span>
+                                    </a>
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item bg-white-op">
+                <h5 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                             data-bs-target="#sampling-devices">
                         Sampling Devices
                     </button>
                 </h5>
 
-                <div id="sampling-devices" class="accordion-collapse collapse show">
+                <div id="sampling-devices" class="accordion-collapse collapse">
                     <div class="accordion-body overflow-auto" style="max-height:72vh">
                         {% for sampling_device in sampling_devices %}
                             <p class="card-text">
@@ -468,4 +553,25 @@
             </div>
         </div>
     </div>
+{% endmacro %}
+
+{% macro newsletter_download_links(
+    newsletters_list
+) %}
+    {% for year, volumes in newsletters_list.items() %}
+        <div>
+            <h5>{{ year }}</h5>
+            <div class="px-4">
+                <ul>
+                    {% for volume in volumes %}
+                        {% for title, file_name in volume.items() %}
+                            <li>
+                                <a href="{{ url_for('home.newsletter_download', year=year, file_name=file_name) }}">{{ title }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
 {% endmacro %}

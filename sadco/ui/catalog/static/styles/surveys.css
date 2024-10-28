@@ -39,3 +39,15 @@ body {
     margin-top: 8px;
     transform: rotate(-45deg);
 }
+
+.ml-auto {
+    margin-left: auto;
+}
+
+.border-left {
+    border-left: 1px solid;
+}
+
+.data-icon-button:hover h5 {
+    text-decoration: underline;
+}
