@@ -1,5 +1,4 @@
 from flask import Flask, Blueprint, request, session
-from pathlib import Path
 
 
 def init_app(app: Flask):

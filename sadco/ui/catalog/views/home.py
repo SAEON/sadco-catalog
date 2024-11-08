@@ -1,5 +1,6 @@
 from pathlib import Path
-import os, json
+import os
+import json
 from flask import Blueprint, render_template, send_file, abort
 
 from sadco.ui.catalog.forms import SearchForm
