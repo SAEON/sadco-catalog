@@ -4,9 +4,16 @@ import zipfile
 
 
 def download_zipped_file(file_name, data) -> Response:
-    zip_buffer = BytesIO()
-    with zipfile.ZipFile(zip_buffer, mode='w') as zip_file:
-        zip_file.writestr(file_name, data)
+    """
+    Check if the data is already zipped. If it isn't, zip before sending.
+    """
+    if zipfile.is_zipfile(BytesIO(data)):
+        zip_buffer = BytesIO(data)
+    else:
+        zip_buffer = BytesIO()
+        with zipfile.ZipFile(zip_buffer, mode='w') as zip_file:
+            zip_file.writestr(file_name, data)
+        zip_buffer.seek(0)
 
     zip_buffer.seek(0)
 
