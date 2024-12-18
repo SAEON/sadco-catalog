@@ -15,3 +15,15 @@ function createStationsMap(stations, n, e, s, w) {
         }
     );
 }
+
+function clearSearchFilters() {
+    $('#survey_id').val('');
+    $('#n').val('');
+    $('#e').val('');
+    $('#s').val('');
+    $('#w').val('');
+    $('#after').val('');
+    $('#before').val('');
+    $('#exclusive_region').val('');
+    $('#exclusive_interval').val('');
+}
