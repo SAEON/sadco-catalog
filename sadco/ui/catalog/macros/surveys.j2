@@ -124,6 +124,44 @@
 ) %}
     {% set _ = kwargs.pop('page', none) %}
 
+    <div class="accordion mb-2">
+        {% for search_facet in search_facets %}
+            <div class="accordion-item bg-white-op">
+                <h5 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#{{ search_facet['title'] | replace(" ", "") }}">
+                        {{ search_facet['title'] }}
+                    </button>
+                </h5>
+
+                <div id="{{ search_facet['title'] | replace(" ", "") }}" class="accordion-collapse collapse">
+                    <div class="accordion-body overflow-auto" style="max-height:72vh">
+                        {% for item in search_facet['items'] %}
+                            <p class="card-text">
+                                {% set query = dict(kwargs) %}
+                                {% set code =  item['code'] | string() %}
+
+                                {% if query.get(search_facet['query_key']) == code %}
+                                    {% set _ = query.pop(search_facet['query_key']) %}
+                                    <span class="fw-bold">{{ item['name'] }}</span>
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
+                                        &#10005;
+                                    </a>
+                                {% else %}
+                                    {% set _ = query.update({ search_facet['query_key']: code }) %}
+                                    <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
+                                        {{ item['name'] }}
+                                        <span>({{ item['count'] }})</span>
+                                    </a>
+                                {% endif %}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
     <form action="{{ url_for(search_endpoint) }}" method="post" class="bg-white-op p-3 rounded">
         {{ form.csrf_token }}
 
@@ -193,44 +231,6 @@
             Clear
         </button>
     </form>
-
-    <div class="accordion mt-2">
-        {% for search_facet in search_facets %}
-            <div class="accordion-item bg-white-op">
-                <h5 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#{{ search_facet['title'] | replace(" ", "") }}">
-                        {{ search_facet['title'] }}
-                    </button>
-                </h5>
-
-                <div id="{{ search_facet['title'] | replace(" ", "") }}" class="accordion-collapse collapse">
-                    <div class="accordion-body overflow-auto" style="max-height:72vh">
-                        {% for item in search_facet['items'] %}
-                            <p class="card-text">
-                                {% set query = dict(kwargs) %}
-                                {% set code =  item['code'] | string() %}
-
-                                {% if query.get(search_facet['query_key']) == code %}
-                                    {% set _ = query.pop(search_facet['query_key']) %}
-                                    <span class="fw-bold">{{ item['name'] }}</span>
-                                    <a href="{{ url_for(endpoint, **query) }}" class="text-decoration-none fs-5">
-                                        &#10005;
-                                    </a>
-                                {% else %}
-                                    {% set _ = query.update({ search_facet['query_key']: code }) %}
-                                    <a href="{{ url_for(endpoint, **query) }}" class="text-underline-hover">
-                                        {{ item['name'] }}
-                                        <span>({{ item['count'] }})</span>
-                                    </a>
-                                {% endif %}
-                            </p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
 {% endmacro %}
 
 {% macro render_survey_summary(
