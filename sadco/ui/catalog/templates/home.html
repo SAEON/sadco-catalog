@@ -1,23 +1,18 @@
 {% extends 'base.html' %}
-{% from 'surveys.j2' import search_box %}
+{% from 'surveys.j2' import search_box, survey_type_icons %}
 
 {% block main %}
     <main class="home-main-wrapper d-flex flex-grow-1 align-items-center justify-content-evenly">
         <div class="home-main-content">
-            <div class="d-flex" style="height: 600px">
-                <div class="col-sm-4 m-auto d-flex">
+            <div class="d-flex" style="height: 70vh">
+                <div class="col-sm-8 m-auto d-flex">
                     <div class="row">
-                        <div class="col-sm-4 mx-auto d-flex flex-column justify-content-end data-icon-button"
-                             role="button"
-                             onclick="window.location.href='{{ url_for('surveys.index') }}';">
-                            <img class="w-100" src="{{ url_for('.static', filename='images/noun-buoy-7876.png') }}">
-                            <h5 class="mx-auto text-white font-weight-bold pt-1">View Marine Data</h5>
-                        </div>
-                        <div class="col-sm-4 mx-auto d-flex flex-column justify-content-end data-icon-button"
+                        {{ survey_type_icons( survey_types ) }}
+                        <div class="col-sm-1 mx-auto d-flex flex-column justify-content-end data-icon-button"
                              role="button"
                              onclick="window.location.href='{{ url_for('vos_surveys.index') }}';">
                             <img class="w-100" src="{{ url_for('.static', filename='images/noun-ship-6999820.png') }}">
-                            <h5 class="mx-auto text-white font-weight-bold pt-1">View VOS Data</h5>
+                            <h5 class="mx-auto text-white font-weight-bold pt-1">Voluntary observing ships</h5>
                         </div>
                     </div>
                 </div>

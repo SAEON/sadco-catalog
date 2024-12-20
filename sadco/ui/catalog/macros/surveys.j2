@@ -1,7 +1,8 @@
 {% from 'content.j2' import render_info %}
 
 {% macro nav_bar_items(
-    current_user
+    current_user,
+    survey_types
 ) %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
             aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +17,12 @@
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                    aria-haspopup="true" aria-expanded="false">Data Access</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ url_for('surveys.index') }}">Marine Data</a>
+                    {% for survey_type in survey_types %}
+                        <a class="dropdown-item"
+                           href="{{ url_for('surveys.index', survey_type_code=survey_type['survey_type_code']) }}">
+                            {{ survey_type['survey_type'] }} Data
+                        </a>
+                    {% endfor %}
                     <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">VOS Data</a>
                     <a class="dropdown-item" href="{{ url_for('download_audit.index') }}">Download Audit</a>
                     <div class="dropdown-divider"></div>
@@ -502,6 +508,20 @@
                     {% endfor %}
                 </ul>
             </div>
+        </div>
+    {% endfor %}
+{% endmacro %}
+
+{% macro survey_type_icons(
+    survey_types
+) %}
+    {% for survey_type in survey_types %}
+        {% set image_file_name = ( survey_type['survey_type'] | lower ) + '.png' %}
+        <div class="col-sm-1 mx-auto d-flex flex-column justify-content-end data-icon-button"
+             role="button"
+             onclick="window.location.href='{{ url_for('surveys.index', survey_type_code=survey_type['survey_type_code']) }}';">
+            <img class="w-100" src="{{ url_for('.static', filename='images/'+image_file_name) }}">
+            <h5 class="mx-auto text-white font-weight-bold pt-1">{{ survey_type['survey_type'] }}</h5>
         </div>
     {% endfor %}
 {% endmacro %}
