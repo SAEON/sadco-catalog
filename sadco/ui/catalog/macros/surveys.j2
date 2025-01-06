@@ -123,6 +123,7 @@
 {% macro filter_panel(
     form,
     search_facets=[],
+    filtered_facets=[],
     show_search=false,
     endpoint='.index',
     search_endpoint='surveys.search',
@@ -134,13 +135,23 @@
         {% for search_facet in search_facets %}
             <div class="accordion-item bg-white-op">
                 <h5 class="accordion-header">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#{{ search_facet['title'] | replace(" ", "") }}">
+                    <button class="accordion-button
+                    {% if not search_facet['query_key'] in filtered_facets %}
+                        collapsed
+                    {% endif %}
+                    " type="button" data-bs-toggle="collapse"
+                    data-bs-target="#{{ search_facet['title'] | replace(" ", "") }}">
                         {{ search_facet['title'] }}
                     </button>
                 </h5>
 
-                <div id="{{ search_facet['title'] | replace(" ", "") }}" class="accordion-collapse collapse">
+                <div id="{{ search_facet['title'] | replace(" ", "") }}" class="accordion-collapse
+                    {% if search_facet['query_key'] in filtered_facets %}
+                        show
+                    {% else %}
+                        collapse
+                    {% endif %}
+                    ">
                     <div class="accordion-body overflow-auto" style="max-height:72vh">
                         {% for item in search_facet['items'] %}
                             <p class="card-text">
