@@ -22,7 +22,6 @@ def index():
     end_date = request.args.get('before')
     exclusive_region = request.args.get('exclusive_region')
     exclusive_interval = request.args.get('exclusive_interval')
-    sampling_device_code = request.args.get('sampling_device_code')
     survey_type_code = request.args.get('survey_type_code')
     institute_code = request.args.get('institute_code')
     page = request.args.get('page', 1)
@@ -38,7 +37,6 @@ def index():
         end_date=end_date,
         exclusive_region=exclusive_region,
         exclusive_interval=exclusive_interval,
-        sampling_device_code=sampling_device_code,
         survey_type_code=survey_type_code,
         institute_code=institute_code,
         page=page
