@@ -20,6 +20,13 @@ def index():
     )
 
 
+@bp.route('/about')
+def about():
+    return render_template(
+        'about.html',
+    )
+
+
 @bp.route('/history')
 def history():
     return render_template(
