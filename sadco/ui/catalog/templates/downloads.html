@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% from 'surveys.j2' import filter_panel %}
-{% from 'downloads.j2' import downloads_list, downloads_audit_navigation %}
+{% from 'downloads.j2' import downloads_list, downloads_history_navigation %}
 {% from 'controls.j2' import pagination, check_all %}
 
 {% set pagination_endpoint = 'index' if downloads_type == 'my' else 'all_downloads' %}
@@ -24,9 +24,9 @@
     <div class="container-xl">
         <div class="row mb-5 justify-content-center">
             <div class="col-4 bg-white-op rounded" style="height: min-content">
-                <h3 class="py-2">Downloads Audit</h3>
+                <h3 class="py-2">Downloads History</h3>
                 {% if all_downloads_required_scope in g.user_permissions %}
-                    {{ downloads_audit_navigation(downloads_type) }}
+                    {{ downloads_history_navigation(downloads_type) }}
                 {% endif %}
                 <hr>
                 {{ pagination }}

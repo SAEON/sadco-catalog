@@ -32,7 +32,7 @@
 {% endmacro %}
 
 
-{% macro downloads_audit_navigation(
+{% macro downloads_history_navigation(
     downloads_type
 ) %}
     <ul class="nav nav-pills">
@@ -42,7 +42,7 @@
                 active
             {% endif %}
             "
-            href="{{ url_for('download_audit.index') }}">
+            href="{{ url_for('download_history.index') }}">
                 My Downloads
             </a>
         </li>
@@ -52,7 +52,7 @@
                     active
                 {% endif %}
                 "
-                href="{{ url_for('download_audit.all_downloads') }}">
+                href="{{ url_for('download_history.all_downloads') }}">
                 All Downloads
             </a>
         </li>

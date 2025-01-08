@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request
 from sadco.const import SADCOScope
 from odp.ui.base import api
 
-bp = Blueprint('download_audit', __name__, static_folder='../static')
+bp = Blueprint('download_history', __name__, static_folder='../static')
 
 
 @bp.route('/', methods=('GET',))

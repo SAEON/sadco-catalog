@@ -23,8 +23,8 @@
                             {{ survey_type['survey_type'] }} Data
                         </a>
                     {% endfor %}
-                    <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">VOS Data</a>
-                    <a class="dropdown-item" href="{{ url_for('download_audit.index') }}">Download Audit</a>
+                    <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">Voluntary Observing Ships Data</a>
+                    <a class="dropdown-item" href="{{ url_for('download_history.index') }}">Download History</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ url_for('home.data_types') }}">Data Types</a>
                     <a class="dropdown-item" href="{{ url_for('home.users_guide') }}">User's Guide</a>

@@ -15,29 +15,38 @@
 </div>
 {% endset %}
 
+{% block web_title %}
+    SADCO - Marine Data
+{% endblock %}
+
 {% block main %}
-<main class="flex-grow-1 m-3">
-    <div class="container-xl">
-        <div class="row mb-5">
-            <div class="col-3 mx-2">
-                {{ filter_panel(form, result['search_facets'], result['filtered_facets'], **dict(request.args)) }}
+    <main class="flex-grow-1 m-3">
+        <div class="container-xl">
+            <div class="row mb-5">
+                <div class="col-md-6 mx-auto d-flex justify-content-center">
+                    <h1 class="text-white">Marine Data</h1>
+                </div>
             </div>
-            <div class="col bg-white-op rounded" style="height: min-content">
-                {{ pagination }}
-                {{ survey_result_list(result['items']) }}
-                {% if result.total > 0 %}
-                {{ pagination }}
-                {% endif %}
+            <div class="row mb-5">
+                <div class="col-3 mx-2">
+                    {{ filter_panel(form, result['search_facets'], result['filtered_facets'], **dict(request.args)) }}
+                </div>
+                <div class="col bg-white-op rounded" style="height: min-content">
+                    {{ pagination }}
+                    {{ survey_result_list(result['items']) }}
+                    {% if result.total > 0 %}
+                        {{ pagination }}
+                    {% endif %}
+                </div>
             </div>
         </div>
-    </div>
-</main>
+    </main>
 {% endblock %}
 
 {% block scripts %}
-{{ super() }}
-<script>
-    createFilterMap();
-</script>
+    {{ super() }}
+    <script>
+        createFilterMap();
+    </script>
 {% endblock %}
 
