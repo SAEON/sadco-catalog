@@ -7,6 +7,7 @@ from sadco.const import SADCOScope
 from odp.const import ODPScope
 from sadco.ui.catalog import views
 from odp.const.hydra import HydraScope
+from sadco.version import VERSION
 from odp.ui import base
 
 
@@ -51,6 +52,7 @@ def create_app():
                 a 3rd party. The following acknowledgement should be used in any products:
                 'The data has been supplied by the Southern African Data Centre for Oceanography'.
             ''',
+        SADCO_VERSION=VERSION
     )
 
     base.init_app(app, user_api=True, client_api=True, template_dir=Path(__file__).parent / 'templates',

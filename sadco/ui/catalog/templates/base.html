@@ -43,15 +43,16 @@
                         <img src="{{ url_for('static', filename='images/ocims-logo.png') }}">
                     </a>
                 </div>
-                <div>
-                    <p class="px-3 mt-4">
+                <div class="px-2">
+                    <p class="mt-4 text-center">
                         Copyright &copy;
                         <script>document.write(new Date().getFullYear())</script>
                         <a href="https://www.dffe.gov.za/" target="_blank" class="text-decoration-none text-white">
                             Department of Forestry, Fisheries and the Environment
                         </a>
-                    </p>
-                    <p class="px-3 text-center">
+                    <br>
+                        SADCO: {{ config.SADCO_VERSION }}
+                    <br>
                         Photo by <a class="text-decoration-underline text-white"
                                     href="https://unsplash.com/@zakharyak?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash">Maksym
                         Zakharyak</a> on <a class="text-decoration-underline text-white"
