@@ -531,7 +531,7 @@
 ) %}
     {% for survey_type in survey_types %}
         {% set image_file_name = ( survey_type['survey_type'] | lower ) + '.png' %}
-        <div class="col-sm-1 mx-auto d-flex flex-column justify-content-end data-icon-button"
+        <div class="col-4 col-md-1 mx-auto d-flex flex-column justify-content-end data-icon-button"
              role="button"
              onclick="window.location.href='{{ url_for('surveys.index', survey_type_code=survey_type['survey_type_code']) }}';">
             <img class="w-100" src="{{ url_for('.static', filename='images/'+image_file_name) }}">
