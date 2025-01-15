@@ -1,12 +1,13 @@
 {% macro downloads_list(
-    downloads
+    downloads,
+    json
 ) %}
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>Survey Type</th>
-            </tr>
+        <tr>
+            <th>Timestamp</th>
+            <th>Survey Type</th>
+        </tr>
         </thead>
         <tbody>
         {% for download in downloads %}
@@ -22,6 +23,13 @@
                             {% for key, value in download['parameters'].items() %}
                                 <li>{{ key }}: {{ value }}</li>
                             {% endfor %}
+                            {% if download['parameters']|length > 1 %}
+                                <div class="d-flex flex-row-reverse">
+                                    <a href="{{ url_for('download_history.re_download', data=json.dumps(download)) }}">
+                                        Download
+                                    </a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </td>
@@ -42,7 +50,7 @@
                 active
             {% endif %}
             "
-            href="{{ url_for('download_history.index') }}">
+               href="{{ url_for('download_history.index') }}">
                 My Downloads
             </a>
         </li>
@@ -52,7 +60,7 @@
                     active
                 {% endif %}
                 "
-                href="{{ url_for('download_history.all_downloads') }}">
+               href="{{ url_for('download_history.all_downloads') }}">
                 All Downloads
             </a>
         </li>

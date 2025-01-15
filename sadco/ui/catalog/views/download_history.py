@@ -1,6 +1,11 @@
+import json
+
 from flask import Blueprint, render_template, request
-from sadco.const import SADCOScope
+
 from odp.ui.base import api
+from sadco.const import SADCOScope, SurveyType
+from .surveys import download_marine_data
+from .vos_surveys import download_vos_data
 
 bp = Blueprint('download_history', __name__, static_folder='../static')
 
@@ -15,7 +20,8 @@ def index():
         'downloads.html',
         all_downloads_required_scope=SADCOScope.DOWNLOAD_ADMIN,
         downloads_type='my',
-        result=downloads
+        result=downloads,
+        json=json
     )
 
 
@@ -30,4 +36,23 @@ def all_downloads():
         all_downloads_required_scope=SADCOScope.DOWNLOAD_ADMIN,
         downloads_type='all',
         result=downloads,
+        json=json
     )
+
+
+@bp.route('/re_download', methods=('GET',))
+@api.view(SADCOScope.DOWNLOAD_READ)
+def re_download():
+    data = request.args.get('data')
+    download_history_info = json.loads(data)
+    survey_type = download_history_info['survey_type']
+    download_parameters = download_history_info['parameters']
+
+    match survey_type:
+        case SurveyType.VOS:
+            return download_vos_data(download_parameters)
+        case _:
+            survey_id = download_parameters['survey_id']
+            data_type = download_parameters['data_type']
+            return download_marine_data(data_type, survey_id)
+

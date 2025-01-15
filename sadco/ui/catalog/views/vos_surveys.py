@@ -39,14 +39,7 @@ def search():
 def vos_download():
     search_bounds = session['search_bounds']
 
-    vos_survey_data = api.get_bytes(
-        '/vos_survey/download',
-        **search_bounds
-    )
-
-    filename = 'vos_surveys.zip'
-
-    return download_zipped_file(filename, vos_survey_data)
+    return download_vos_data(search_bounds)
 
 
 @bp.route('/download', methods=('POST',))
@@ -81,3 +74,14 @@ def get_search_query():
         query.pop('exclusive_interval')
 
     return query
+
+
+def download_vos_data(search_bounds: dict):
+    vos_survey_data = api.get_bytes(
+        '/vos_survey/download',
+        **search_bounds
+    )
+
+    filename = 'vos_surveys.zip'
+
+    return download_zipped_file(filename, vos_survey_data)

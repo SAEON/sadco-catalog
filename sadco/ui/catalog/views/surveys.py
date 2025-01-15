@@ -79,53 +79,43 @@ def survey_detail(survey_type, survey_id):
 @bp.route(f'/download/{SurveyType.HYDRO.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.HYDRO_DOWNLOAD)
 def hydro_download(survey_id):
-    return download(SurveyType.HYDRO.value, survey_id)
+    form = HydroDownloadForm(request.form)
+    return download_marine_data(form.data['data_type'], survey_id)
 
 
 @bp.route(f'/download/{SurveyType.CURRENTS.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.CURRENTS_DOWNLOAD)
 def currents_download(survey_id):
-    return download(SurveyType.CURRENTS.value, survey_id)
+    return download_marine_data(SurveyType.CURRENTS.value, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.WEATHER.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.WEATHER_DOWNLOAD)
 def weather_download(survey_id):
-    return download(SurveyType.WEATHER.value, survey_id)
+    return download_marine_data(SurveyType.WEATHER.value, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.WAVES.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.WAVES_DOWNLOAD)
 def waves_download(survey_id):
-    return download(SurveyType.WAVES.value, survey_id)
+    return download_marine_data(SurveyType.WAVES.value, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.UTR.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.UTR_DOWNLOAD)
 def utr_download(survey_id):
-    return download(SurveyType.UTR.value, survey_id)
+    return download_marine_data(SurveyType.UTR.value, survey_id)
 
 
-def download(survey_type, survey_id):
-    data_type = get_download_data_type(survey_type)
-
+def download_marine_data(data_type, survey_id):
     survey_data = api.get_bytes(
-        f'/survey/download/{survey_type}/{survey_id}',
+        f'/survey/download/{data_type}/{survey_id}',
         data_type=data_type
     )
 
     file_name = f'survey_{survey_id}_{data_type}.zip'
 
     return download_zipped_file(file_name, survey_data)
-
-
-def get_download_data_type(survey_type) -> str:
-    match survey_type:
-        case SurveyType.HYDRO:
-            form = HydroDownloadForm(request.form)
-            return form.data['data_type']
-        case _:
-            return survey_type
 
 
 def get_survey_type_template(survey_type) -> str:

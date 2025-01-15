@@ -30,7 +30,7 @@
                 {% endif %}
                 <hr>
                 {{ pagination }}
-                {{ downloads_list(result['items']) }}
+                {{ downloads_list(result['items'], json) }}
                 {% if result.total > 0 %}
                 {{ pagination }}
                 {% endif %}
