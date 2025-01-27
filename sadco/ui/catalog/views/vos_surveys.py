@@ -1,10 +1,13 @@
+from pathlib import Path
+
 from flask import Blueprint, redirect, render_template, request, url_for, session
+
 from odp.ui.base import cli, api
+from sadco.const import SADCOScope
 from sadco.ui.catalog.forms import SearchForm
 from sadco.ui.catalog.lib import download_zipped_file
-from sadco.const import SADCOScope
 
-bp = Blueprint('vos_surveys', __name__, static_folder='../static')
+bp = Blueprint('vos_surveys', __name__, static_folder=Path(__file__).parent.parent / 'static')
 
 
 @bp.route('/')
