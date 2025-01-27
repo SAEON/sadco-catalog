@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from flask import Blueprint, render_template, request
 
@@ -7,7 +8,7 @@ from sadco.const import SADCOScope, SurveyType
 from .surveys import download_marine_data
 from .vos_surveys import download_vos_data
 
-bp = Blueprint('download_history', __name__, static_folder='../static')
+bp = Blueprint('download_history', __name__, static_folder=Path(__file__).parent.parent / 'static',)
 
 
 @bp.route('/', methods=('GET',))

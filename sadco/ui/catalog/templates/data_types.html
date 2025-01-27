@@ -37,20 +37,22 @@
                     <h5>Quality Control</h5>
                     <p>The quality control procedures for the various types of data are described in the
                         Newsletters.</p>
+                    <br>
                     <ul>
                         <li>
                             <strong>Hydrographic stations:</strong> To conform with international checks, the QC flags
                             of the World Ocean
-                            Database (WOD) were adopted, so that data obtained from the World Data Centre (WDC) could be
-                            be integrated almost seamlessly into the existing SADCO data base. The QC process involves 3
-                            groups of checks, namely checks of the <strong>station</strong> information, checks of the
+                            Database (WOD) were adopted, so that data obtained from the World Data Centre (WDC) could
+                            be integrated almost seamlessly into the existing SADCO database. The QC process involves
+                            three (3) groups of checks, namely checks of the <strong>station</strong> information,
+                            checks of the
                             <strong>profiles</strong> and
                             checks of the <strong>subsurface observations</strong>. No flags are installed for the
                             station checks
                             (stations are either accepted – sometimes with small corrections - or rejected). For the
                             <strong>profile</strong> and <strong>observation</strong> checks, flags are allocated per
                             parameter (e.g. temperature,
-                            salinity, nutrients,...) and the flags installed by SADCO are a subset of the WOD flags plus
+                            salinity, nutrients) and the flags installed by SADCO are a subset of the WOD flags plus
                             a spike check. The variables that are checked are: depth, temperature, salinity, oxygen,
                             phosphate, silicate, nitrate, pH, dissolved inorganic carbon (DIC) and total chlorophyll.
                             For a more complete description, please see SADCO newsletter
@@ -81,15 +83,30 @@
                         </li>
                     </ul>
 
-                    <h5>AFROBIS</h5>
-                    <p>A large amount of biogeographic data has been loaded in
-                        <a href="http://afrobis.csir.co.za" target="_blank">AfrOBIS</a>, the African Node for the Ocean
-                        Biogeographic Information System. This database as well as the global information in OBIS, is
-                        freely accessible, and contains search, plotting and download facilities
-                    </p>
-
                     <h5>Target Area</h5>
-                    <img src="{{ url_for('.static', filename='images/sadco_targetarea.jpg') }}" style="width: 100%">
+                    <img src="{{ url_for('.static', filename='images/sadco_targetarea.jpg') }}" class="mb-4"
+                         style="width: 100%">
+
+                    <p>
+                        The Department of Environment, Forestry and Fisheries (DFFE), as the nominated disseminating
+                        custodian of the historical Southern African Data Centre for Oceanography (SADCO) data, assumes
+                        no responsibility, legal or otherwise regarding the use of this data. The historical Southern
+                        African Data Centre for Oceanography (SADCO) data accessible through the
+                        <a href="http://sadco.ocean.gov.za/">sadco.ocean.gov.za</a> portal were processed a long time
+                        ago by various Principal
+                        Investigators (PI). Some of these PIs have since retired or moved on and are no longer with the
+                        National Department of Forestry, Fisheries and the Environment. The currently listed PIs on the
+                        SADCO database might therefore not necessarily be the persons who collected, processed, and
+                        archived the data. In addition, the historical data archived on SADCO was processed using older
+                        standards which may not align with international best practices and the standards currently
+                        adhered to by DFFE. As such the user assumes the entire risk related to the use of these data in
+                        its current state and format. DFFE disclaims all warranties of the data whether expressed or
+                        implied, including without limitation, any warranties of merchantability or fitness for a
+                        particular purpose. For any concerns regarding the data held in the SADCO, the user may decide
+                        to liaise with the listed PIs who will share their insight on the data quality, where possible.
+                        It is also strongly recommended that the user liaises with the listed PIs regarding their
+                        proposed projects to mitigate against duplication of research efforts.
+                    </p>
                 </div>
             </div>
         </div>
