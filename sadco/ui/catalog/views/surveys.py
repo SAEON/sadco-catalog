@@ -82,8 +82,7 @@ def survey_detail(survey_type, survey_id):
 @bp.route(f'/download/{SurveyType.HYDRO.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.HYDRO_DOWNLOAD)
 def hydro_download(survey_id):
-    form = HydroDownloadForm(request.form)
-    return download_marine_data(form.data['data_type'], survey_id)
+    return download_marine_data(SurveyType.HYDRO.value, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.CURRENTS.value}/<survey_id>', methods=('POST',))
@@ -110,9 +109,16 @@ def utr_download(survey_id):
     return download_marine_data(SurveyType.UTR.value, survey_id)
 
 
-def download_marine_data(data_type, survey_id):
+def download_marine_data(survey_type, survey_id):
+    match survey_type:
+        case SurveyType.HYDRO:
+            form = HydroDownloadForm(request.form)
+            data_type = form.data['data_type']
+        case _:
+            data_type = survey_type
+
     survey_data = api.get_bytes(
-        f'/survey/download/{data_type}/{survey_id}',
+        f'/survey/download/{survey_type}/{survey_id}',
         data_type=data_type
     )
 
