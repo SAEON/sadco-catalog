@@ -58,20 +58,6 @@ def create_app():
     base.init_app(app, user_api=True, client_api=True, template_dir=Path(__file__).parent / 'templates',
                   macro_dir=Path(__file__).parent / 'macros', api_url=sadco_config.SADCO.API_URL)
 
-    @app.context_processor
-    def inject_globals():
-        result = base.cli.get('/survey/survey_types')
-
-        survey_types = [
-            {
-                'survey_type_code': item['code'],
-                'survey_type': item['name']
-            }
-            for item in result if item['code'] != 0 and item['code'] != 7
-        ]
-
-        return {'survey_types': survey_types}
-
     views.init_app(app)
 
     return app
