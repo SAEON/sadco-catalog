@@ -55,5 +55,5 @@ def re_download():
         case _:
             survey_id = download_parameters['survey_id']
             data_type = download_parameters['data_type']
-            return download_marine_data(data_type, survey_id)
+            return download_marine_data(survey_type, data_type, survey_id)
 

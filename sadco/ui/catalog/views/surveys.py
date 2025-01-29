@@ -83,36 +83,41 @@ def survey_detail(survey_type, survey_id):
 @api.view(SADCOScope.HYDRO_DOWNLOAD)
 def hydro_download(survey_id):
     form = HydroDownloadForm(request.form)
-    return download_marine_data(form.data['data_type'], survey_id)
+    data_type = form.data['data_type']
+    return download_marine_data(SurveyType.HYDRO.value, data_type, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.CURRENTS.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.CURRENTS_DOWNLOAD)
 def currents_download(survey_id):
-    return download_marine_data(SurveyType.CURRENTS.value, survey_id)
+    survey_type = SurveyType.CURRENTS.value
+    return download_marine_data(survey_type, survey_type, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.WEATHER.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.WEATHER_DOWNLOAD)
 def weather_download(survey_id):
-    return download_marine_data(SurveyType.WEATHER.value, survey_id)
+    survey_type = SurveyType.WEATHER.value
+    return download_marine_data(survey_type, survey_type, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.WAVES.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.WAVES_DOWNLOAD)
 def waves_download(survey_id):
-    return download_marine_data(SurveyType.WAVES.value, survey_id)
+    survey_type = SurveyType.WAVES.value
+    return download_marine_data(survey_type, survey_type, survey_id)
 
 
 @bp.route(f'/download/{SurveyType.UTR.value}/<survey_id>', methods=('POST',))
 @api.view(SADCOScope.UTR_DOWNLOAD)
 def utr_download(survey_id):
-    return download_marine_data(SurveyType.UTR.value, survey_id)
+    survey_type = SurveyType.UTR.value
+    return download_marine_data(survey_type, survey_type, survey_id)
 
 
-def download_marine_data(data_type, survey_id):
+def download_marine_data(survey_type, data_type, survey_id):
     survey_data = api.get_bytes(
-        f'/survey/download/{data_type}/{survey_id}',
+        f'/survey/download/{survey_type}/{survey_id}',
         data_type=data_type
     )
 
