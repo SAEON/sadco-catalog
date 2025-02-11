@@ -2,7 +2,7 @@
 
 {% macro nav_bar_items(
     current_user,
-    survey_types
+    marine_survey_types
 ) %}
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor04"
             aria-controls="navbarColor04" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,10 +17,10 @@
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
                    aria-haspopup="true" aria-expanded="false">Data Access</a>
                 <div class="dropdown-menu">
-                    {% for survey_type in survey_types %}
+                    {% for survey_type in marine_survey_types %}
                         <a class="dropdown-item"
-                           href="{{ url_for('surveys.index', survey_type_code=survey_type['survey_type_code']) }}">
-                            {{ survey_type['survey_type'] }} Data
+                           href="{{ url_for('surveys.index', survey_type_code=survey_type['code']) }}">
+                            {{ survey_type['name'] }} Data
                         </a>
                     {% endfor %}
                     <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">Voluntary Observing Ships Data</a>
@@ -527,15 +527,15 @@
 {% endmacro %}
 
 {% macro survey_type_icons(
-    survey_types
+    marine_survey_types
 ) %}
-    {% for survey_type in survey_types %}
-        {% set image_file_name = ( survey_type['survey_type'] | lower ) + '.png' %}
+    {% for survey_type in marine_survey_types %}
+        {% set image_file_name = ( survey_type['name'] | lower ) + '.png' %}
         <div class="col-4 col-md-1 mx-auto d-flex flex-column justify-content-end data-icon-button"
              role="button"
-             onclick="window.location.href='{{ url_for('surveys.index', survey_type_code=survey_type['survey_type_code']) }}';">
+             onclick="window.location.href='{{ url_for('surveys.index', survey_type_code=survey_type['code']) }}';">
             <img class="w-100" src="{{ url_for('.static', filename='images/'+image_file_name) }}">
-            <h5 class="mx-auto text-white font-weight-bold pt-1">{{ survey_type['survey_type'] }}</h5>
+            <h5 class="mx-auto text-white font-weight-bold pt-1">{{ survey_type['name'] }}</h5>
         </div>
     {% endfor %}
 {% endmacro %}
