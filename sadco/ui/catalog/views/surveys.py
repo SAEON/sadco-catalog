@@ -45,6 +45,11 @@ def index():
         page=page
     )
 
+    form_ = SearchForm(request.args)
+
+    for search_facet in result['search_facets']:
+        form_.add_facet(search_facet['query_key'])
+
     return render_template(
         'survey_index.html',
         form=SearchForm(request.args),

@@ -23,7 +23,8 @@
                             {{ survey_type['name'] }} Data
                         </a>
                     {% endfor %}
-                    <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">Voluntary Observing Ships Data</a>
+                    <a class="dropdown-item" href="{{ url_for('vos_surveys.index') }}">Voluntary Observing Ships
+                        Data</a>
                     <a class="dropdown-item" href="{{ url_for('download_history.index') }}">Download History</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ url_for('home.data_types') }}">Data Types</a>
@@ -250,6 +251,16 @@
                 title="Clear filters">
             Clear
         </button>
+
+        {% for search_facet in search_facets %}
+            {% set query = dict(kwargs) %}
+            {% for item in search_facet['items'] %}
+                {% set code =  item['code'] | string() %}
+                {% if query.get(search_facet['query_key']) == code %}
+                    <input type="hidden" name="{{ search_facet['query_key'] }}" value="{{ code }}">
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
     </form>
 {% endmacro %}
 

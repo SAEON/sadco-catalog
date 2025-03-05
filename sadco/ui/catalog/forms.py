@@ -16,6 +16,11 @@ class SearchForm(BaseForm):
     exclusive_region = BooleanField(label='Exclusive region')
     exclusive_interval = BooleanField(label='Exclusive interval')
 
+    @classmethod
+    def add_facet(cls, facet: str) -> None:
+        """Add facet field to the search form."""
+        setattr(cls, facet, StringField())
+
 
 class HydroDownloadForm(BaseForm):
     data_type = SelectField(label='Data type')
